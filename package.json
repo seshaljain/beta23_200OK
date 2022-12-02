@@ -9,8 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.1",
+    "@apollo/react-hooks": "^4.0.0",
+    "@apollo/react-ssr": "^4.0.0",
+    "deepmerge": "^4.2.2",
     "formik": "^2.2.9",
+    "graphql": "^16.6.0",
+    "lodash": "^4.17.21",
     "next": "13.0.6",
+    "next-auth": "^4.17.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },

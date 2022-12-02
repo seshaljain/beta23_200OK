@@ -3,10 +3,11 @@ import Link from 'next/link'
 import Head from 'next/head'
 
 export default function Layout({ children, title }) {
+  const titleText = `${title} | HMS`
   return (
     <>
       <Head>
-        <title>{title} | HMS</title>
+        <title>{titleText}</title>
       </Head>
       <nav className="flex items-center justify-between p-4 bg-gray-100 border-b border-gray-300">
         <h2 className="text-xl font-medium">
