@@ -8,8 +8,7 @@ const styles = {
 
 export default function Profile() {
   return (
-    <DashboardLayout>
-      <h1 className="text-2xl font-medium uppercase">Update Profile Details</h1>
+    <DashboardLayout title="Update Profile Details">
       <Formik
         initialValues={{ name: '', email: '' }}
         onSubmit={async (values) => {
