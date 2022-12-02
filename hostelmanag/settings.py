@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-nsr@gkq852oi&8qq=w=$++^d(3vvewwtani__twjgt!&8*61r3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["10.12.2.154", "127.0.0.1", "localhost", "10.64.158.113"]
 
 
 # Application definition
@@ -37,18 +37,27 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
+    "graphene_django",
+    'graphql_auth',
+    'django_filters',
+    "corsheaders",
+    
     'user',
 ]
+
+AUTH_USER_MODEL = 'user.AbstractHostelUser'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
 ]
 
 ROOT_URLCONF = "hostelmanag.urls"
@@ -123,3 +132,28 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+GRAPHENE = {
+    'SCHEMA': 'hostelmanag.schema.schema' ,
+    'MIDDLEWARE' : [
+        'graphql_jwt.middleware.JSONWebTokenMiddleware' ,
+    ],
+}
+
+AUTHENTICATION_BACKENDS = [
+    'graphql_auth.backends.GraphQLAuthBackend' ,
+    'django.contrib.auth.backends.ModelBackend' ,
+]
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+GRAPHQL_JWT = {
+    "JWT_ALLOW_ANY_ACCESS" : [
+        'graphql_auth.mutations.Register' ,
+        'graphql_auth.mutations.VerifyAccount' ,
+        'graphql_auth.mutations.ObtainJSONWebToken' ,
+    ]
+}
+
+CORS_ALLOW_ALL_ORIGINS = True
