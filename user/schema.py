@@ -2,7 +2,7 @@ import graphene
 from graphene_django import DjangoObjectType
 from graphql_jwt.decorators import login_required
 
-from .models import Student
+from .models import Student, Complaint
 
 class StudentType(DjangoObjectType):
     class Meta:
@@ -54,3 +54,67 @@ class CreateStudent(graphene.Mutation):
 class StudentMutation(graphene.ObjectType):
     create_student = CreateStudent.Field()
     update_student = UpdateStudent.Field()
+
+
+
+class ComplaintType(DjangoObjectType):
+    class Meta:
+        model = Complaint
+
+class CreateComplaint(graphene.Mutation):
+    complaint = graphene.Field(ComplaintType)
+
+    class Arguments:
+        complaint = graphene.String()
+
+    @classmethod
+    @login_required
+    def mutate(cls, root, info, complaint):
+        complaint = Complaint(student=info.context.user.student, complaint=complaint)
+        complaint.save()
+
+        return CreateComplaint(complaint=complaint)
+
+class UpdateComplaint(graphene.Mutation):
+    complaint = graphene.Field(ComplaintType)
+
+    class Arguments:
+        id = graphene.Int(required=True)
+        status = graphene.String(required=True)
+
+    @classmethod
+    @login_required
+    def mutate(cls, root, info, id, status):
+        complaint = Complaint.objects.get(id = id)
+        complaint.status = True if status == 'true' else False
+        complaint.save()
+
+        return UpdateComplaint(complaint=complaint)
+
+class ComplaintMutation(graphene.ObjectType):
+    create_complaint = CreateComplaint.Field()
+    update_complaint = UpdateComplaint.Field()
+
+
+class ComplaintQuery(graphene.ObjectType):
+    user_complaint = graphene.Field(ComplaintType, id=graphene.Int())
+    user_complaints_all = graphene.List(ComplaintType)
+    complaints_all = graphene.List(ComplaintType)
+
+    @classmethod
+    @login_required
+    def resolve_user_complaint(cls, root, info, id):
+        return Complaint.objects.get(id=id)
+    
+    @classmethod
+    @login_required
+    def resolve_user_complaints_all(cls, root, info):
+        return Complaint.objects.filter(student=info.context.user.student)
+
+    @classmethod
+    @login_required
+    def resolve_complaints_all(cls, root, info):
+        if not info.context.user.is_student:
+            return Complaint.objects.all()
+        else:
+            return None
