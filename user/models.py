@@ -106,3 +106,13 @@ class Complaint(models.Model):
     def __str__(self):
         return self.complaint
 
+
+class StudentInOutTime(models.Model):
+    id = models.AutoField(primary_key=True)
+    student = models.ForeignKey('Student', on_delete=models.CASCADE)
+    in_time = models.DateTimeField(null=True)
+    out_time = models.DateTimeField(null=True)
+    date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.student.enrollment_no
