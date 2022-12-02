@@ -157,3 +157,9 @@ GRAPHQL_JWT = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+GRAPHQL_AUTH = {
+    'REGISTER_MUTATION_FIELDS_OPTIONAL' : {
+        'is_student': 'Boolean' ,
+    }
+}
