@@ -22,7 +22,7 @@ export const authOptions = {
             }
           }
         `
-        const res = await fetch(process.env.GRAPHQL_ENDPOINT, {
+        const res = await fetch(process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -46,12 +46,19 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    jwt: async ({ token, user }) => {
-      user && (token.user = user)
+    async jwt({ token, user }) {
+      // Initial sign in
+      if (!!user) {
+        token.user = user
+      }
+
       return token
     },
-    session: async ({ session, token }) => {
+    async session({ session, token }) {
       session.user = token.user
+      session.token = token
+      session.error = token.error
+
       return session
     },
   },
