@@ -2,7 +2,9 @@ import graphene
 from graphene_django import DjangoObjectType
 from graphql_jwt.decorators import login_required
 
-from .models import Student, Complaint
+from .models import Student, Complaint, StudentInOutTime
+
+from datetime import datetime
 
 class StudentType(DjangoObjectType):
     class Meta:
@@ -118,3 +120,66 @@ class ComplaintQuery(graphene.ObjectType):
             return Complaint.objects.all()
         else:
             return None
+
+class StudentInOutTimeType(DjangoObjectType):
+    class Meta:
+        model = StudentInOutTime
+
+class StudentGoingOutTime(graphene.Mutation):
+    studentGoingOutTime = graphene.Field(StudentInOutTimeType)
+
+    class Arguments:
+        username = graphene.String(required=True)
+
+    @classmethod
+    @login_required
+    def mutate(cls, root, info, username):
+        student = Student.objects.filter(user__username=username).first()
+        going_out = StudentInOutTime(student=student, out_time=datetime.now())
+        going_out.save()
+
+        return StudentGoingOutTime(studentGoingOutTime=going_out)
+
+class StudentGoingInTime(graphene.Mutation):
+    studentGoingInTime = graphene.Field(StudentInOutTimeType)
+
+    class Arguments:
+        username = graphene.String(required=True)
+
+
+    @classmethod
+    @login_required
+    def mutate(cls, root, info, username):
+        student = Student.objects.filter(user__username=username).first()
+        student_last_going_out = StudentInOutTime.objects.filter(student=student).last()
+        student_last_going_out.in_time = datetime.now()
+        student_last_going_out.save()
+
+        return StudentGoingInTime(studentGoingInTime=student_last_going_out)
+
+class StudentInOutTimeMutation(graphene.ObjectType):
+    in_time = StudentGoingInTime.Field()
+    out_time = StudentGoingOutTime.Field()
+
+
+class StudentInOutTimeQuery(graphene.ObjectType):
+    student_in_out_time = graphene.Field(StudentInOutTimeType, id=graphene.Int())
+    student_in_out_times = graphene.List(StudentInOutTimeType, username=graphene.String())
+    all_student_in_out_times = graphene.List(StudentInOutTimeType)
+    
+
+    @classmethod
+    @login_required
+    def resolve_student_in_out_time(cls, root, info, id):
+        return StudentInOutTime.objects.get(id=id)
+    
+    @classmethod
+    @login_required
+    def resolve_student_in_out_times(cls, root, info, username):
+        student = Student.objects.filter(user__username=username).first()
+        return StudentInOutTime.objects.filter(student=student)
+
+    @classmethod
+    @login_required
+    def resolve_all_student_in_out_times(cls, root, info):
+        return StudentInOutTime.objects.all()

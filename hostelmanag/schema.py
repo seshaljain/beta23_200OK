@@ -3,8 +3,8 @@ import graphene
 from graphql_auth.schema import MeQuery
 from graphql_auth import mutations
 
-from user.schema import StudentMutation, ComplaintMutation
-from user.schema import ComplaintQuery
+from user.schema import StudentMutation, ComplaintMutation, StudentInOutTimeMutation
+from user.schema import ComplaintQuery, StudentInOutTimeQuery
 
 class AuthMutation(graphene.ObjectType):
     register = mutations.Register.Field()
@@ -12,10 +12,10 @@ class AuthMutation(graphene.ObjectType):
     token_auth = mutations.ObtainJSONWebToken.Field()
     update_account = mutations.UpdateAccount.Field()
 
-class Query(MeQuery, ComplaintQuery, graphene.ObjectType):
+class Query(MeQuery, ComplaintQuery, StudentInOutTimeQuery, graphene.ObjectType):
     pass
 
-class Mutation(AuthMutation, StudentMutation, ComplaintMutation, graphene.ObjectType):
+class Mutation(AuthMutation, StudentMutation, ComplaintMutation, StudentInOutTimeMutation, graphene.ObjectType):
     pass
 
 
