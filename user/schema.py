@@ -22,9 +22,9 @@ class UpdateStudent(graphene.Mutation):
     @classmethod
     @login_required
     def mutate(cls, root, info, **kwargs):
-        student = Student.objects.get(user=info.context.user)
-        
-        for (key, value) in kwargs.items():
+        student = Student.objects.get_or_create(user=info.context.user)[0]
+
+        for key, value in kwargs.items():
             setattr(student, key, value)
 
         student.save()
