@@ -10,8 +10,12 @@ django-graphql-jwt = "==0.3.0"
 django-graphql-auth = "*"
 graphene = "*"
 django-cors-headers = "*"
+requests = "*"
+authlib = "*"
+python-dotenv = "*"
 
 [dev-packages]
+lorem = "*"
 
 [requires]
 python_version = "3.10"
