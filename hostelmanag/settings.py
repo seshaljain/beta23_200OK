@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "corsheaders",
     
     'user',
+    'ridesharing',
 ]
 
 AUTH_USER_MODEL = 'user.AbstractHostelUser'
