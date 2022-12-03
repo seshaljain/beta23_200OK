@@ -35,7 +35,6 @@ export default function Posts() {
     refetchQueries: [{ query: GET_POSTS }, 'GetPosts'],
   })
   const { data } = useAllPostsQuery()
-  console.log(data)
 
   return (
     <DashboardLayout title="Community Posts">

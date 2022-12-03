@@ -77,6 +77,7 @@ export type Mutation = {
   createStudent?: Maybe<CreateStudent>;
   inTime?: Maybe<StudentGoingInTime>;
   outTime?: Maybe<StudentGoingOutTime>;
+  qrScan?: Maybe<StudentQrScan>;
   /**
    * Register user with fields defined in the settings.
    *
@@ -163,6 +164,11 @@ export type MutationInTimeArgs = {
 
 
 export type MutationOutTimeArgs = {
+  username: Scalars['String'];
+};
+
+
+export type MutationQrScanArgs = {
   username: Scalars['String'];
 };
 
@@ -375,6 +381,11 @@ export type StudentInOutTimeType = {
   inTime?: Maybe<Scalars['DateTime']>;
   outTime?: Maybe<Scalars['DateTime']>;
   student: StudentType;
+};
+
+export type StudentQrScan = {
+  __typename?: 'StudentQRScan';
+  studentQRScan?: Maybe<StudentInOutTimeType>;
 };
 
 export type StudentType = {

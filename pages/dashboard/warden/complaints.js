@@ -3,55 +3,55 @@ import { useAllComplaintsQuery } from '../../../graphql/generated'
 
 const ComplaintTable = ({ complaints }) => {
   return (
-    <div class="max-w-full mx-8 my-4">
-      <div class="flex flex-col">
-        <div class="overflow-x-auto shadow-md sm:rounded-lg">
-          <div class="inline-block min-w-full align-middle">
-            <div class="overflow-hidden ">
-              <table class="min-w-full divide-y divide-gray-200 table-fixed">
-                <thead class="bg-gray-100">
+    <div className="max-w-full mx-8 my-4">
+      <div className="flex flex-col">
+        <div className="overflow-x-auto shadow-md sm:rounded-lg">
+          <div className="inline-block min-w-full align-middle">
+            <div className="overflow-hidden ">
+              <table className="min-w-full divide-y divide-gray-200 table-fixed">
+                <thead className="bg-gray-100">
                   <tr>
                     <th
                       scope="col"
-                      class="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
+                      className="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
                     >
                       Complaint
                     </th>
                     <th
                       scope="col"
-                      class="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
+                      className="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
                     >
                       Mady by
                     </th>
                     <th
                       scope="col"
-                      class="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
+                      className="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
                     >
                       Date
                     </th>
                     <th
                       scope="col"
-                      class="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
+                      className="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
                     >
                       Status
                     </th>
                   </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200 ">
+                <tbody className="bg-white divide-y divide-gray-200 ">
                   {complaints &&
                     complaints.map((complaint) => {
                       return (
                         <tr key={complaint.id}>
-                          <td class="py-4 px-6 text-sm font-medium whitespace-nowrap">
+                          <td className="py-4 px-6 text-sm font-medium whitespace-nowrap">
                             {complaint.complaint}
                           </td>
-                          <td class="py-4 px-6 text-sm font-medium whitespace-nowrap">
+                          <td className="py-4 px-6 text-sm font-medium whitespace-nowrap">
                             {complaint.student.studentName}
                           </td>
-                          <td class="py-4 px-6 text-sm font-medium whitespace-nowrap">
+                          <td className="py-4 px-6 text-sm font-medium whitespace-nowrap">
                             {complaint.date}
                           </td>
-                          <td class="py-4 px-6 text-sm font-medium whitespace-nowrap">
+                          <td className="py-4 px-6 text-sm font-medium whitespace-nowrap">
                             {complaint.status ? 'Resolved' : 'Pending'}
                           </td>
                         </tr>
@@ -69,55 +69,55 @@ const ComplaintTable = ({ complaints }) => {
 
 const PendingComplaintTable = ({ complaints }) => {
   return (
-    <div class="max-w-full mx-8 my-4">
-      <div class="flex flex-col">
-        <div class="overflow-x-auto shadow-md sm:rounded-lg">
-          <div class="inline-block min-w-full align-middle">
-            <div class="overflow-hidden ">
-              <table class="min-w-full divide-y divide-gray-200 table-fixed">
-                <thead class="bg-gray-100">
+    <div className="max-w-full mx-8 my-4">
+      <div className="flex flex-col">
+        <div className="overflow-x-auto shadow-md sm:rounded-lg">
+          <div className="inline-block min-w-full align-middle">
+            <div className="overflow-hidden ">
+              <table className="min-w-full divide-y divide-gray-200 table-fixed">
+                <thead className="bg-gray-100">
                   <tr>
                     <th
                       scope="col"
-                      class="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
+                      className="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
                     >
                       Complaint
                     </th>
                     <th
                       scope="col"
-                      class="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
+                      className="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
                     >
                       Mady by
                     </th>
                     <th
                       scope="col"
-                      class="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
+                      className="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
                     >
                       Date
                     </th>
                     <th
                       scope="col"
-                      class="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
+                      className="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
                     >
                       Status
                     </th>
                   </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200 ">
+                <tbody className="bg-white divide-y divide-gray-200 ">
                   {complaints &&
                     complaints.map((complaint) => {
                       return (
                         <tr key={complaint.id}>
-                          <td class="py-4 px-6 text-sm font-medium whitespace-nowrap">
+                          <td className="py-4 px-6 text-sm font-medium whitespace-nowrap">
                             {complaint.complaint}
                           </td>
-                          <td class="py-4 px-6 text-sm font-medium whitespace-nowrap">
+                          <td className="py-4 px-6 text-sm font-medium whitespace-nowrap">
                             {complaint.student.studentName}
                           </td>
-                          <td class="py-4 px-6 text-sm font-medium whitespace-nowrap">
+                          <td className="py-4 px-6 text-sm font-medium whitespace-nowrap">
                             {complaint.date}
                           </td>
-                          <td class="py-4 px-6 text-sm font-medium whitespace-nowrap">
+                          <td className="py-4 px-6 text-sm font-medium whitespace-nowrap">
                             {complaint.status ? 'Resolved' : 'Pending'}
                           </td>
                         </tr>
