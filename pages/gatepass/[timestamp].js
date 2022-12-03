@@ -8,9 +8,11 @@ export default function GatePass() {
 
   const { timestamp } = router.query
   useEffect(() => {
+    console.log(session)
     const { timestamp } = router.query
-    if (status !== 'loading' && !!session) {
-      signIn()
+    if (status !== 'loading' && session) {
+      console.log('Not signed in')
+      // signIn()
     } else {
       console.log(timestamp)
     }

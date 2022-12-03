@@ -1,30 +1,72 @@
-import Head from 'next/head'
-import { useSession, signOut } from 'next-auth/react'
+import AdminDashboardLayout from '../../../components/layouts/adminDashboard'
+import { useListStudentsQuery } from '../../../graphql/generated'
 
 export default function List() {
-  const { data: session } = useSession()
+  const { data } = useListStudentsQuery()
   return (
-    <>
-      <Head>
-        <title>Student List | HMS</title>
-      </Head>
-      <main className="min-h-screen bg-amber-100">
-        <header className="flex items-center justify-between px-4 text-white shadow md:px-12 bg-amber-500 h-36">
-          <h1 className="text-3xl font-bold">Student List</h1>
-          <div className="text-lg">
-            <span>Hi, {session?.user?.username}</span>
-            <button
-              onClick={() => signOut()}
-              className="px-3 py-2 m-2 ml-4 rounded bg-amber-600 hover:shadow"
-            >
-              Logout
-            </button>
+    <AdminDashboardLayout title="Student List">
+      <div class="max-w-full m-8">
+        <div class="flex flex-col">
+          <div class="overflow-x-auto shadow-md sm:rounded-lg">
+            <div class="inline-block min-w-full align-middle">
+              <div class="overflow-hidden ">
+                <table class="min-w-full divide-y divide-gray-200 table-fixed">
+                  <thead class="bg-gray-100">
+                    <tr>
+                      <th
+                        scope="col"
+                        class="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
+                      >
+                        Name
+                      </th>
+                      <th
+                        scope="col"
+                        class="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
+                      >
+                        Father's Name
+                      </th>
+                      <th
+                        scope="col"
+                        class="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
+                      >
+                        Enrollment Number
+                      </th>
+                      <th
+                        scope="col"
+                        class="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
+                      >
+                        Course
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-gray-200 ">
+                    {data?.getAllStudents.map((student) => {
+                      return (
+                        <tr key={student.id}>
+                          <td class="py-4 px-6 text-sm font-medium whitespace-nowrap">
+                            {student.studentName}
+                          </td>
+                          <td class="py-4 px-6 text-sm font-medium whitespace-nowrap">
+                            {student.fatherName}
+                          </td>
+                          <td class="py-4 px-6 text-sm font-medium whitespace-nowrap">
+                            {student.enrollmentNo}
+                          </td>
+                          <td class="py-4 px-6 text-sm font-medium whitespace-nowrap">
+                            {student.course}
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
-        </header>
-        <article className="p-4 mx-4 -mt-4 bg-white rounded-lg shadow md:mx-12">
-          // TODO: Add student list
-        </article>
-      </main>
-    </>
+        </div>
+      </div>
+    </AdminDashboardLayout>
   )
 }
+
+List.auth = true

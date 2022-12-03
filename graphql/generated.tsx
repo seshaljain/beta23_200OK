@@ -236,18 +236,27 @@ export type Query = {
   allPosts?: Maybe<Array<Maybe<PostType>>>;
   allRides?: Maybe<Array<Maybe<RideType>>>;
   allStudentInOutTimes?: Maybe<Array<Maybe<StudentInOutTimeType>>>;
+  allWardens?: Maybe<Array<Maybe<WardenType>>>;
   complaintsAll?: Maybe<Array<Maybe<ComplaintType>>>;
+  getAllStudents?: Maybe<Array<Maybe<StudentType>>>;
+  getStudent?: Maybe<StudentType>;
   me?: Maybe<UserNode>;
   post?: Maybe<PostType>;
   studentInOutTime?: Maybe<StudentInOutTimeType>;
   studentInOutTimes?: Maybe<Array<Maybe<StudentInOutTimeType>>>;
   userComplaint?: Maybe<ComplaintType>;
   userComplaintsAll?: Maybe<Array<Maybe<ComplaintType>>>;
+  warden?: Maybe<WardenType>;
 };
 
 
 export type QueryAllRidesArgs = {
   onlyNotFinished?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+export type QueryGetStudentArgs = {
+  id?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -267,6 +276,11 @@ export type QueryStudentInOutTimesArgs = {
 
 
 export type QueryUserComplaintArgs = {
+  id?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryWardenArgs = {
   id?: InputMaybe<Scalars['Int']>;
 };
 
@@ -449,7 +463,7 @@ export type UserComplaintsQuery = { __typename?: 'Query', userComplaintsAll?: Ar
 export type AllComplaintsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllComplaintsQuery = { __typename?: 'Query', complaintsAll?: Array<{ __typename?: 'ComplaintType', complaint: string, status: boolean, date: any } | null> | null };
+export type AllComplaintsQuery = { __typename?: 'Query', complaintsAll?: Array<{ __typename?: 'ComplaintType', id: string, complaint: string, date: any, status: boolean, student: { __typename?: 'StudentType', id: string, studentName?: string | null, enrollmentNo?: string | null } } | null> | null };
 
 export type CreateComplaintMutationVariables = Exact<{
   complaint: Scalars['String'];
@@ -504,6 +518,11 @@ export type CreateRideMutationVariables = Exact<{
 
 
 export type CreateRideMutation = { __typename?: 'Mutation', createRide?: { __typename?: 'CreateRide', ride?: { __typename?: 'RideType', id: string } | null } | null };
+
+export type ListStudentsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ListStudentsQuery = { __typename?: 'Query', getAllStudents?: Array<{ __typename?: 'StudentType', id: string, studentName?: string | null, fatherName?: string | null, enrollmentNo?: string | null, course?: string | null } | null> | null };
 
 
 export const LoginDocument = gql`
@@ -695,9 +714,15 @@ export type UserComplaintsQueryResult = Apollo.QueryResult<UserComplaintsQuery, 
 export const AllComplaintsDocument = gql`
     query allComplaints {
   complaintsAll {
+    id
+    student {
+      id
+      studentName
+      enrollmentNo
+    }
     complaint
-    status
     date
+    status
   }
 }
     `;
@@ -1046,3 +1071,41 @@ export function useCreateRideMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateRideMutationHookResult = ReturnType<typeof useCreateRideMutation>;
 export type CreateRideMutationResult = Apollo.MutationResult<CreateRideMutation>;
 export type CreateRideMutationOptions = Apollo.BaseMutationOptions<CreateRideMutation, CreateRideMutationVariables>;
+export const ListStudentsDocument = gql`
+    query listStudents {
+  getAllStudents {
+    id
+    studentName
+    fatherName
+    enrollmentNo
+    course
+  }
+}
+    `;
+
+/**
+ * __useListStudentsQuery__
+ *
+ * To run a query within a React component, call `useListStudentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListStudentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListStudentsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useListStudentsQuery(baseOptions?: Apollo.QueryHookOptions<ListStudentsQuery, ListStudentsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ListStudentsQuery, ListStudentsQueryVariables>(ListStudentsDocument, options);
+      }
+export function useListStudentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListStudentsQuery, ListStudentsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ListStudentsQuery, ListStudentsQueryVariables>(ListStudentsDocument, options);
+        }
+export type ListStudentsQueryHookResult = ReturnType<typeof useListStudentsQuery>;
+export type ListStudentsLazyQueryHookResult = ReturnType<typeof useListStudentsLazyQuery>;
+export type ListStudentsQueryResult = Apollo.QueryResult<ListStudentsQuery, ListStudentsQueryVariables>;

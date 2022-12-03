@@ -1,0 +1,9 @@
+query listStudents {
+  getAllStudents {
+    id
+    studentName
+    fatherName
+    enrollmentNo
+    course
+  }
+}
