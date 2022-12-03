@@ -4,7 +4,7 @@ from graphql_auth.schema import MeQuery
 from graphql_auth import mutations
 
 from user.schema import StudentMutation, ComplaintMutation, StudentInOutTimeMutation
-from user.schema import ComplaintQuery, StudentInOutTimeQuery, WardenQuery
+from user.schema import ComplaintQuery, StudentInOutTimeQuery, WardenQuery, InfoQuery
 
 from ridesharing.schema import RideMutation
 from ridesharing.schema import RideQuery
@@ -22,7 +22,7 @@ class AuthMutation(graphene.ObjectType):
     update_account = mutations.UpdateAccount.Field()
 
 
-class Query(MeQuery, ComplaintQuery, StudentInOutTimeQuery, RideQuery, PostQuery, WardenQuery, MessNotEatingQuery, graphene.ObjectType):
+class Query(MeQuery, ComplaintQuery, StudentInOutTimeQuery, RideQuery, PostQuery, WardenQuery, MessNotEatingQuery, InfoQuery, graphene.ObjectType):
     pass
 
 
