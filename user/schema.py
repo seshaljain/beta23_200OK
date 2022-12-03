@@ -161,6 +161,10 @@ class StudentGoingOutTime(graphene.Mutation):
     @login_required
     def mutate(cls, root, info, username):
         student = Student.objects.filter(user__username=username).first()
+        # check if any out time already exists for the student
+        student_out = StudentInOutTime.objects.filter(student=student, in_time=None)
+        if student_out:
+            return None
         going_out = StudentInOutTime(student=student, out_time=datetime.now())
         going_out.save()
 
@@ -192,6 +196,7 @@ class StudentInOutTimeQuery(graphene.ObjectType):
     student_in_out_time = graphene.Field(StudentInOutTimeType, id=graphene.Int())
     student_in_out_times = graphene.List(StudentInOutTimeType, username=graphene.String())
     all_student_in_out_times = graphene.List(StudentInOutTimeType)
+    all_student_in_out_times_today = graphene.List(StudentInOutTimeType)
     
 
     @classmethod
@@ -209,3 +214,8 @@ class StudentInOutTimeQuery(graphene.ObjectType):
     @login_required
     def resolve_all_student_in_out_times(cls, root, info):
         return StudentInOutTime.objects.all()
+
+    @classmethod
+    @login_required
+    def resolve_all_student_in_out_times_today(cls, root, info):
+        return StudentInOutTime.objects.filter(date=datetime.now())
