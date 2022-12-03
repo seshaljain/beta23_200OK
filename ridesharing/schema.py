@@ -55,7 +55,10 @@ class RideMutation(graphene.ObjectType):
 
 
 class RideQuery(graphene.ObjectType):
-    all_rides = graphene.List(RideType, finished=graphene.Boolean())
+    all_rides = graphene.List(RideType, only_not_finished=graphene.Boolean())
 
-    def resolve_all_rides(self, info, finished=False):
-        return Ride.objects.filter(finished=finished)
+    def resolve_all_rides(self, info, only_not_finished=False):
+        if only_not_finished:
+            return Ride.objects.filter(finished=False)
+        else:
+            return Ride.objects.all()
