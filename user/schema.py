@@ -201,9 +201,35 @@ class StudentGoingInTime(graphene.Mutation):
         return StudentGoingInTime(studentGoingInTime=student_last_going_out)
 
 
+class StudentQRScan(graphene.Mutation):
+    studentQRScan = graphene.Field(StudentInOutTimeType)
+
+    class Arguments:
+        username = graphene.String(required=True)
+
+    @classmethod
+    @login_required
+    def mutate(cls, root, info, username):
+        student = Student.objects.filter(user__username=username).first()
+
+        # check if any out time already exists for the student
+        student_last_going_out = StudentInOutTime.objects.filter(
+            student=student, in_time=None).last()
+
+        if student_last_going_out:
+            student_last_going_out.in_time = datetime.now()
+            student_last_going_out.save()
+            return StudentQRScan(studentQRScan=student_last_going_out)
+        else:
+            going_out = StudentInOutTime(student=student, out_time=datetime.now())
+            going_out.save()
+            return StudentQRScan(studentQRScan=going_out)
+
+
 class StudentInOutTimeMutation(graphene.ObjectType):
     in_time = StudentGoingInTime.Field()
     out_time = StudentGoingOutTime.Field()
+    qr_scan = StudentQRScan.Field()
 
 
 class StudentInOutTimeQuery(graphene.ObjectType):
