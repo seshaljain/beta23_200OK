@@ -1,11 +1,19 @@
-import Link from 'next/link'
+import { useEffect } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
 
-export default function Dashboard() {
-  return (
-    <>
-      <h1>Dashboard Page</h1>
-      <Link href="/dashboard/student">Student Dashboard</Link>
-      <Link href="/dashboard/warden">Warden Dashboard</Link>
-    </>
-  )
+function Dashboard() {
+  const { data: session } = useSession()
+  const router = useRouter()
+
+  useEffect(() => {
+    session?.user?.isStudent
+      ? router.replace('/dashboard/student')
+      : router.replace('/dashboard/warden')
+  }, [session])
+
+  return 'Loading...'
 }
+
+Dashboard.auth = true
+export default Dashboard

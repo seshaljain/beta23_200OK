@@ -1,0 +1,10 @@
+mutation updateStud($course: String, $dob: String, $enrollmentNo: String, $fatherName: String, $gender: String) {
+  updateStudent(course: $course, dob: $dob, enrollmentNo: $enrollmentNo, fatherName: $fatherName, gender: $gender) {
+    student {
+      id
+      enrollmentNo
+      studentName
+      fatherName
+    }
+  }
+}

@@ -18,6 +18,7 @@ export const authOptions = {
               user {
                 id
                 username
+                isStudent
               }
             }
           }
@@ -40,7 +41,7 @@ export const authOptions = {
         const { data } = await res.json()
 
         if (data?.tokenAuth?.success) {
-          return {...data.tokenAuth.user, token: data.tokenAuth.token}
+          return { ...data.tokenAuth.user, token: data.tokenAuth.token }
         } else return null
       },
     }),

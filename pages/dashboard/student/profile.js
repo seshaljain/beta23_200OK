@@ -1,5 +1,6 @@
 import DashboardLayout from '../../../components/layouts/dashboard'
 import { Formik, Field, Form } from 'formik'
+import { useUpdateStudMutation } from '../../../graphql/generated'
 
 const styles = {
   label: 'block uppercase text-sm font-bold mt-4',
@@ -7,13 +8,20 @@ const styles = {
 }
 
 export default function Profile() {
+  const [updateStudMutation] = useUpdateStudMutation()
+
   return (
     <DashboardLayout title="Update Profile Details">
       <Formik
-        initialValues={{ name: '', email: '' }}
+        initialValues={{ schNum: '191112001', DoB: '2001-06-01' }}
         onSubmit={async (values) => {
-          await new Promise((resolve) => setTimeout(resolve, 500))
-          alert(JSON.stringify(values, null, 2))
+          updateStudMutation({
+            course: values.course,
+            dob: values.DoB,
+            enrollmentNo: values.enrollmentNo,
+            fatherName: values.fatherName,
+            gender: values.gender,
+          })
         }}
       >
         <Form>
