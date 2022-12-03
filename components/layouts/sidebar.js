@@ -24,6 +24,19 @@ export default function Navbar() {
           </Link>
         </li>
       </ul>
+      <h3 className="mt-4 font-bold uppercase">Community</h3>
+      <ul className="my-2 space-y-4">
+        <li>
+          <Link href="/dashboard/student/posts" className="text-lg">
+            Posts
+          </Link>
+        </li>
+        <li>
+          <Link href="/dashboard/student/ridesharing" className="text-lg">
+            Ride Sharing
+          </Link>
+        </li>
+      </ul>
     </aside>
   )
 }

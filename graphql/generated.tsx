@@ -32,6 +32,11 @@ export type CreateComplaint = {
   complaint?: Maybe<ComplaintType>;
 };
 
+export type CreatePost = {
+  __typename?: 'CreatePost';
+  post?: Maybe<PostType>;
+};
+
 export type CreateRide = {
   __typename?: 'CreateRide';
   ride?: Maybe<RideType>;
@@ -45,6 +50,7 @@ export type CreateStudent = {
 export type Mutation = {
   __typename?: 'Mutation';
   createComplaint?: Maybe<CreateComplaint>;
+  createPost?: Maybe<CreatePost>;
   createRide?: Maybe<CreateRide>;
   createStudent?: Maybe<CreateStudent>;
   inTime?: Maybe<StudentGoingInTime>;
@@ -109,7 +115,15 @@ export type MutationCreateComplaintArgs = {
 };
 
 
+export type MutationCreatePostArgs = {
+  content?: InputMaybe<Scalars['String']>;
+  tags?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
+};
+
+
 export type MutationCreateRideArgs = {
+  endTime?: InputMaybe<Scalars['DateTime']>;
   hasVehicle?: InputMaybe<Scalars['Boolean']>;
   startTime?: InputMaybe<Scalars['DateTime']>;
   vehicleType?: InputMaybe<Scalars['String']>;
@@ -207,12 +221,23 @@ export type ObtainJsonWebToken = {
   user?: Maybe<UserNode>;
 };
 
+export type PostType = {
+  __typename?: 'PostType';
+  content: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  tags: Scalars['String'];
+  title: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  allPosts?: Maybe<Array<Maybe<PostType>>>;
   allRides?: Maybe<Array<Maybe<RideType>>>;
   allStudentInOutTimes?: Maybe<Array<Maybe<StudentInOutTimeType>>>;
   complaintsAll?: Maybe<Array<Maybe<ComplaintType>>>;
   me?: Maybe<UserNode>;
+  post?: Maybe<PostType>;
   studentInOutTime?: Maybe<StudentInOutTimeType>;
   studentInOutTimes?: Maybe<Array<Maybe<StudentInOutTimeType>>>;
   userComplaint?: Maybe<ComplaintType>;
@@ -222,6 +247,11 @@ export type Query = {
 
 export type QueryAllRidesArgs = {
   onlyNotFinished?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+export type QueryPostArgs = {
+  id?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -268,10 +298,12 @@ export type Register = {
 
 export type RideType = {
   __typename?: 'RideType';
+  endTime?: Maybe<Scalars['DateTime']>;
   finished: Scalars['Boolean'];
   hasVehicle: Scalars['Boolean'];
   id: Scalars['ID'];
   startTime?: Maybe<Scalars['DateTime']>;
+  student?: Maybe<StudentType>;
   vehicleType: Scalars['String'];
 };
 
@@ -302,6 +334,7 @@ export type StudentType = {
   fatherName?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   noDues: Scalars['Boolean'];
+  rideSet: Array<RideType>;
   room?: Maybe<Scalars['String']>;
   roomAllotted: Scalars['Boolean'];
   studentName?: Maybe<Scalars['String']>;
@@ -350,7 +383,7 @@ export type UserNode = Node & {
   lastLogin?: Maybe<Scalars['DateTime']>;
   lastName: Scalars['String'];
   pk?: Maybe<Scalars['Int']>;
-  rideSet: Array<RideType>;
+  postSet: Array<PostType>;
   secondaryEmail?: Maybe<Scalars['String']>;
   student?: Maybe<StudentType>;
   /** Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only. */
@@ -452,6 +485,19 @@ export type ProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ProfileQuery = { __typename?: 'Query', me?: { __typename?: 'UserNode', student?: { __typename?: 'StudentType', id: string, enrollmentNo?: string | null, studentName?: string | null, fatherName?: string | null, course?: string | null } | null } | null };
+
+export type AllRidesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllRidesQuery = { __typename?: 'Query', allRides?: Array<{ __typename?: 'RideType', id: string, hasVehicle: boolean, vehicleType: string, endTime?: any | null, startTime?: any | null, student?: { __typename?: 'StudentType', studentName?: string | null, enrollmentNo?: string | null } | null } | null> | null };
+
+export type CreateRideMutationVariables = Exact<{
+  hasVehicle?: InputMaybe<Scalars['Boolean']>;
+  startTime?: InputMaybe<Scalars['DateTime']>;
+}>;
+
+
+export type CreateRideMutation = { __typename?: 'Mutation', createRide?: { __typename?: 'CreateRide', ride?: { __typename?: 'RideType', id: string } | null } | null };
 
 
 export const LoginDocument = gql`
@@ -874,3 +920,81 @@ export function useProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Pr
 export type ProfileQueryHookResult = ReturnType<typeof useProfileQuery>;
 export type ProfileLazyQueryHookResult = ReturnType<typeof useProfileLazyQuery>;
 export type ProfileQueryResult = Apollo.QueryResult<ProfileQuery, ProfileQueryVariables>;
+export const AllRidesDocument = gql`
+    query allRides {
+  allRides {
+    id
+    student {
+      studentName
+      enrollmentNo
+    }
+    hasVehicle
+    vehicleType
+    endTime
+    startTime
+  }
+}
+    `;
+
+/**
+ * __useAllRidesQuery__
+ *
+ * To run a query within a React component, call `useAllRidesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllRidesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllRidesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllRidesQuery(baseOptions?: Apollo.QueryHookOptions<AllRidesQuery, AllRidesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllRidesQuery, AllRidesQueryVariables>(AllRidesDocument, options);
+      }
+export function useAllRidesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllRidesQuery, AllRidesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllRidesQuery, AllRidesQueryVariables>(AllRidesDocument, options);
+        }
+export type AllRidesQueryHookResult = ReturnType<typeof useAllRidesQuery>;
+export type AllRidesLazyQueryHookResult = ReturnType<typeof useAllRidesLazyQuery>;
+export type AllRidesQueryResult = Apollo.QueryResult<AllRidesQuery, AllRidesQueryVariables>;
+export const CreateRideDocument = gql`
+    mutation createRide($hasVehicle: Boolean, $startTime: DateTime) {
+  createRide(hasVehicle: $hasVehicle, startTime: $startTime) {
+    ride {
+      id
+    }
+  }
+}
+    `;
+export type CreateRideMutationFn = Apollo.MutationFunction<CreateRideMutation, CreateRideMutationVariables>;
+
+/**
+ * __useCreateRideMutation__
+ *
+ * To run a mutation, you first call `useCreateRideMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateRideMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createRideMutation, { data, loading, error }] = useCreateRideMutation({
+ *   variables: {
+ *      hasVehicle: // value for 'hasVehicle'
+ *      startTime: // value for 'startTime'
+ *   },
+ * });
+ */
+export function useCreateRideMutation(baseOptions?: Apollo.MutationHookOptions<CreateRideMutation, CreateRideMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateRideMutation, CreateRideMutationVariables>(CreateRideDocument, options);
+      }
+export type CreateRideMutationHookResult = ReturnType<typeof useCreateRideMutation>;
+export type CreateRideMutationResult = Apollo.MutationResult<CreateRideMutation>;
+export type CreateRideMutationOptions = Apollo.BaseMutationOptions<CreateRideMutation, CreateRideMutationVariables>;

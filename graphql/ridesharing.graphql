@@ -1,0 +1,21 @@
+query allRides {
+  allRides {
+    id
+    student {
+      studentName
+      enrollmentNo
+    }
+    hasVehicle
+    vehicleType
+    endTime
+    startTime
+  }
+}
+
+mutation createRide($hasVehicle: Boolean, $startTime: DateTime) {
+  createRide(hasVehicle: $hasVehicle, startTime: $startTime) {
+    ride {
+      id
+    }
+  }
+}

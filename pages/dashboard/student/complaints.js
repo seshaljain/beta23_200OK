@@ -167,7 +167,7 @@ export default function Complaints() {
       <h2 className="mt-8 text-2xl font-bold">
         Emergency Committee Member Details
       </h2>
-      <div className="flex flex-wrap">
+      <div className="flex flex-wrap -mx-4">
         {committeeData.map((c) => (
           <div key={c.id} className="p-4 m-4 bg-white rounded shadow">
             <p className="font-bold">{c.name}</p>

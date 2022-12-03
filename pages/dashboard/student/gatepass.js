@@ -18,7 +18,7 @@ export default function GatePass() {
 
   return (
     <DashboardLayout title="GatePass">
-      <QRCodeCanvas value={data?.me?.username} className="my-8" />
+      <QRCodeCanvas value={data?.me?.username} size={256} className="my-8" />
     </DashboardLayout>
   )
 }
