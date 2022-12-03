@@ -169,10 +169,8 @@ export type MutationUpdateRideArgs = {
 
 export type MutationUpdateStudentArgs = {
   course?: InputMaybe<Scalars['String']>;
-  dob?: InputMaybe<Scalars['String']>;
   enrollmentNo?: InputMaybe<Scalars['String']>;
   fatherName?: InputMaybe<Scalars['String']>;
-  gender?: InputMaybe<Scalars['String']>;
   studentName?: InputMaybe<Scalars['String']>;
 };
 
@@ -277,14 +275,6 @@ export type RideType = {
   vehicleType: Scalars['String'];
 };
 
-/** An enumeration. */
-export enum StudentGender {
-  /** Female */
-  F = 'F',
-  /** Male */
-  M = 'M'
-}
-
 export type StudentGoingInTime = {
   __typename?: 'StudentGoingInTime';
   studentGoingInTime?: Maybe<StudentInOutTimeType>;
@@ -307,11 +297,12 @@ export type StudentInOutTimeType = {
 export type StudentType = {
   __typename?: 'StudentType';
   complaintSet: Array<ComplaintType>;
+  course?: Maybe<Scalars['String']>;
   enrollmentNo?: Maybe<Scalars['String']>;
   fatherName?: Maybe<Scalars['String']>;
-  gender?: Maybe<StudentGender>;
   id: Scalars['ID'];
   noDues: Scalars['Boolean'];
+  room?: Maybe<Scalars['String']>;
   roomAllotted: Scalars['Boolean'];
   studentName?: Maybe<Scalars['String']>;
   studentinouttimeSet: Array<StudentInOutTimeType>;
@@ -411,14 +402,18 @@ export type UserQuery = { __typename?: 'Query', me?: { __typename?: 'UserNode', 
 
 export type UpdateStudMutationVariables = Exact<{
   course?: InputMaybe<Scalars['String']>;
-  dob?: InputMaybe<Scalars['String']>;
   enrollmentNo?: InputMaybe<Scalars['String']>;
   fatherName?: InputMaybe<Scalars['String']>;
-  gender?: InputMaybe<Scalars['String']>;
+  studentName?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type UpdateStudMutation = { __typename?: 'Mutation', updateStudent?: { __typename?: 'UpdateStudent', student?: { __typename?: 'StudentType', id: string, enrollmentNo?: string | null, studentName?: string | null, fatherName?: string | null } | null } | null };
+export type UpdateStudMutation = { __typename?: 'Mutation', updateStudent?: { __typename?: 'UpdateStudent', student?: { __typename?: 'StudentType', id: string, enrollmentNo?: string | null, studentName?: string | null, fatherName?: string | null, course?: string | null } | null } | null };
+
+export type ProfileQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ProfileQuery = { __typename?: 'Query', me?: { __typename?: 'UserNode', student?: { __typename?: 'StudentType', id: string, enrollmentNo?: string | null, studentName?: string | null, fatherName?: string | null, course?: string | null } | null } | null };
 
 
 export const LoginDocument = gql`
@@ -572,19 +567,19 @@ export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
 export const UpdateStudDocument = gql`
-    mutation updateStud($course: String, $dob: String, $enrollmentNo: String, $fatherName: String, $gender: String) {
+    mutation updateStud($course: String, $enrollmentNo: String, $fatherName: String, $studentName: String) {
   updateStudent(
     course: $course
-    dob: $dob
     enrollmentNo: $enrollmentNo
     fatherName: $fatherName
-    gender: $gender
+    studentName: $studentName
   ) {
     student {
       id
       enrollmentNo
       studentName
       fatherName
+      course
     }
   }
 }
@@ -605,10 +600,9 @@ export type UpdateStudMutationFn = Apollo.MutationFunction<UpdateStudMutation, U
  * const [updateStudMutation, { data, loading, error }] = useUpdateStudMutation({
  *   variables: {
  *      course: // value for 'course'
- *      dob: // value for 'dob'
  *      enrollmentNo: // value for 'enrollmentNo'
  *      fatherName: // value for 'fatherName'
- *      gender: // value for 'gender'
+ *      studentName: // value for 'studentName'
  *   },
  * });
  */
@@ -619,3 +613,43 @@ export function useUpdateStudMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdateStudMutationHookResult = ReturnType<typeof useUpdateStudMutation>;
 export type UpdateStudMutationResult = Apollo.MutationResult<UpdateStudMutation>;
 export type UpdateStudMutationOptions = Apollo.BaseMutationOptions<UpdateStudMutation, UpdateStudMutationVariables>;
+export const ProfileDocument = gql`
+    query profile {
+  me {
+    student {
+      id
+      enrollmentNo
+      studentName
+      fatherName
+      course
+    }
+  }
+}
+    `;
+
+/**
+ * __useProfileQuery__
+ *
+ * To run a query within a React component, call `useProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProfileQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useProfileQuery(baseOptions?: Apollo.QueryHookOptions<ProfileQuery, ProfileQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProfileQuery, ProfileQueryVariables>(ProfileDocument, options);
+      }
+export function useProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProfileQuery, ProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProfileQuery, ProfileQueryVariables>(ProfileDocument, options);
+        }
+export type ProfileQueryHookResult = ReturnType<typeof useProfileQuery>;
+export type ProfileLazyQueryHookResult = ReturnType<typeof useProfileLazyQuery>;
+export type ProfileQueryResult = Apollo.QueryResult<ProfileQuery, ProfileQueryVariables>;

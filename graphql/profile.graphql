@@ -1,10 +1,33 @@
-mutation updateStud($course: String, $dob: String, $enrollmentNo: String, $fatherName: String, $gender: String) {
-  updateStudent(course: $course, dob: $dob, enrollmentNo: $enrollmentNo, fatherName: $fatherName, gender: $gender) {
+mutation updateStud(
+  $course: String
+  $enrollmentNo: String
+  $fatherName: String
+  $studentName: String
+) {
+  updateStudent(
+    course: $course
+    enrollmentNo: $enrollmentNo
+    fatherName: $fatherName
+    studentName: $studentName
+  ) {
     student {
       id
       enrollmentNo
       studentName
       fatherName
+      course
+    }
+  }
+}
+
+query profile {
+  me {
+    student {
+      id
+      enrollmentNo
+      studentName
+      fatherName
+      course
     }
   }
 }
