@@ -174,3 +174,5 @@ export default function Complaints() {
     </DashboardLayout>
   )
 }
+
+Complaints.auth = true

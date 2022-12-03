@@ -7,7 +7,6 @@ import {
   useAllRidesQuery,
 } from '../../../graphql/generated'
 
-
 const CREATE_RIDE = gql`
   mutation createRide(
     $hasVehicle: Boolean
@@ -44,7 +43,7 @@ const GET_RIDES = gql`
   }
 `
 
-export default function Posts() {
+export default function RideSharing() {
   const { data } = useAllRidesQuery()
 
   const [createRide] = useMutation(CREATE_RIDE, {
@@ -136,3 +135,5 @@ export default function Posts() {
     </DashboardLayout>
   )
 }
+
+RideSharing.auth = true

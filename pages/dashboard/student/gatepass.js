@@ -22,3 +22,5 @@ export default function GatePass() {
     </DashboardLayout>
   )
 }
+
+GatePass.auth = true

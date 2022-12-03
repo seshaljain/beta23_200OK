@@ -7,9 +7,11 @@ function Dashboard() {
   const router = useRouter()
 
   useEffect(() => {
-    session?.user?.isStudent
-      ? router.replace('/dashboard/student')
-      : router.replace('/dashboard/warden')
+    if (session?.user?.isStudent) {
+      router.replace('/dashboard/student')
+    } else {
+      router.replace('/dashboard/warden')
+    }
   }, [session])
 
   return 'Loading...'

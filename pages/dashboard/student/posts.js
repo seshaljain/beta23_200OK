@@ -2,6 +2,7 @@ import DashboardLayout from '../../../components/layouts/dashboard'
 import { useMutation, gql } from '@apollo/client'
 import { Formik, Field, Form } from 'formik'
 import { useAllPostsQuery } from '../../../graphql/generated'
+import dayjs from 'dayjs'
 
 const CREATE_POST = gql`
   mutation createPost($title: String, $tags: String, $content: String) {
@@ -20,6 +21,11 @@ const GET_POSTS = gql`
       title
       tags
       content
+      createdAt
+      student {
+        studentName
+        enrollmentNo
+      }
     }
   }
 `
@@ -95,16 +101,25 @@ export default function Posts() {
           </Formik>
         </div>
         <div>
-          <div className="flex flex-wrap -mx-4">
+          <div className="flex flex-wrap">
             {data?.allPosts.map((post) => (
-              <div key={post.id} className="p-4 m-4 bg-white rounded shadow">
-                <h4 className="text-sm font-bold">{post?.title}</h4>
-                <p>{post?.content}</p>
+              <div
+                key={post.id}
+                className="p-4 m-4 bg-white rounded shadow w-96"
+              >
+                <h4 className="font-bold">{post?.title}</h4>
+                <p className="flex items-center justify-between my-2">
+                  <span>{post?.student.studentName}</span>
+                  <span>
+                    {dayjs(post?.createdAt).format('YYYY-MM-DD HH:mm')}
+                  </span>
+                </p>
+                <p className="mt-2">{post?.content}</p>
                 <p className="-mx-1">
                   {post?.tags.split(',').map((tag) => (
                     <span
                       key={tag}
-                      className="inline-block p-1 m-1 text-xs uppercase bg-gray-100 rounded"
+                      className="inline-block p-1 m-1 text-xs lowercase bg-gray-100 rounded"
                     >
                       {tag}
                     </span>
@@ -118,3 +133,5 @@ export default function Posts() {
     </DashboardLayout>
   )
 }
+
+Posts.auth = true

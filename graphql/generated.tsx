@@ -475,7 +475,7 @@ export type IntimeMutation = { __typename?: 'Mutation', inTime?: { __typename?: 
 export type AllPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllPostsQuery = { __typename?: 'Query', allPosts?: Array<{ __typename?: 'PostType', id: string, title: string, tags: string, content: string } | null> | null };
+export type AllPostsQuery = { __typename?: 'Query', allPosts?: Array<{ __typename?: 'PostType', id: string, title: string, tags: string, content: string, createdAt: any, student: { __typename?: 'StudentType', studentName?: string | null, enrollmentNo?: string | null } } | null> | null };
 
 export type UpdateStudMutationVariables = Exact<{
   course?: InputMaybe<Scalars['String']>;
@@ -846,6 +846,11 @@ export const AllPostsDocument = gql`
     title
     tags
     content
+    createdAt
+    student {
+      studentName
+      enrollmentNo
+    }
   }
 }
     `;

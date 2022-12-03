@@ -131,3 +131,5 @@ export default function Profile() {
     </DashboardLayout>
   )
 }
+
+Profile.auth = true
