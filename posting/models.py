@@ -2,8 +2,10 @@ from django.db import models
 
 # Create your models here.
 
+from user.models import Student
+
 class Post(models.Model):
-    user = models.ForeignKey('user.AbstractHostelUser', on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

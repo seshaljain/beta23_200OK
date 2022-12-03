@@ -4,11 +4,14 @@ from graphql_auth.schema import MeQuery
 from graphql_auth import mutations
 
 from user.schema import StudentMutation, ComplaintMutation, StudentInOutTimeMutation
-from user.schema import ComplaintQuery, StudentInOutTimeQuery
+from user.schema import ComplaintQuery, StudentInOutTimeQuery, WardenQuery
 
 from ridesharing.schema import RideMutation
 from ridesharing.schema import RideQuery
 
+
+from posting.schema import PostMutation
+from posting.schema import PostQuery
 
 class AuthMutation(graphene.ObjectType):
     register = mutations.Register.Field()
@@ -17,11 +20,11 @@ class AuthMutation(graphene.ObjectType):
     update_account = mutations.UpdateAccount.Field()
 
 
-class Query(MeQuery, ComplaintQuery, StudentInOutTimeQuery, RideQuery, graphene.ObjectType):
+class Query(MeQuery, ComplaintQuery, StudentInOutTimeQuery, RideQuery, PostQuery, WardenQuery, graphene.ObjectType):
     pass
 
 
-class Mutation(AuthMutation, StudentMutation, ComplaintMutation, StudentInOutTimeMutation, RideMutation, graphene.ObjectType):
+class Mutation(AuthMutation, StudentMutation, ComplaintMutation, StudentInOutTimeMutation, RideMutation, PostMutation, graphene.ObjectType):
     pass
 
 

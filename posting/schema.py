@@ -4,6 +4,7 @@ from graphene_django import DjangoObjectType
 from graphql_jwt.decorators import login_required
 
 from .models import Post
+from user.models import Student
 
 class PostType(DjangoObjectType):
     class Meta:
@@ -20,10 +21,14 @@ class CreatePost(graphene.Mutation):
     @classmethod
     @login_required
     def mutate(cls, root, info, title, content, tags):
-        post = Post(user=info.context.user, title=title, content=content, tags=tags)
+        student = Student.objects.get(user=info.context.user)
+        post = Post(student=student, title=title, content=content, tags=tags)
         post.save()
 
         return CreatePost(post=post)
+
+class PostMutation(graphene.ObjectType):
+    create_post = CreatePost.Field()
 
 class PostQuery(graphene.ObjectType):
     all_posts = graphene.List(PostType)
