@@ -356,6 +356,7 @@ export type UserNode = Node & {
   /** Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only. */
   username: Scalars['String'];
   verified?: Maybe<Scalars['Boolean']>;
+  warden?: Maybe<WardenType>;
 };
 
 /**
@@ -369,6 +370,12 @@ export type VerifyAccount = {
   __typename?: 'VerifyAccount';
   errors?: Maybe<Scalars['ExpectedErrorType']>;
   success?: Maybe<Scalars['Boolean']>;
+};
+
+export type WardenType = {
+  __typename?: 'WardenType';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
 };
 
 export type LoginMutationVariables = Exact<{
@@ -399,6 +406,37 @@ export type UserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type UserQuery = { __typename?: 'Query', me?: { __typename?: 'UserNode', id: string, username: string, isStudent: boolean } | null };
+
+export type UserComplaintsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserComplaintsQuery = { __typename?: 'Query', userComplaintsAll?: Array<{ __typename?: 'ComplaintType', complaint: string, status: boolean, date: any } | null> | null };
+
+export type AllComplaintsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllComplaintsQuery = { __typename?: 'Query', complaintsAll?: Array<{ __typename?: 'ComplaintType', complaint: string, status: boolean, date: any } | null> | null };
+
+export type CreateComplaintMutationVariables = Exact<{
+  complaint: Scalars['String'];
+}>;
+
+
+export type CreateComplaintMutation = { __typename?: 'Mutation', createComplaint?: { __typename?: 'CreateComplaint', complaint?: { __typename?: 'ComplaintType', id: string, status: boolean, complaint: string } | null } | null };
+
+export type OuttimeMutationVariables = Exact<{
+  username: Scalars['String'];
+}>;
+
+
+export type OuttimeMutation = { __typename?: 'Mutation', outTime?: { __typename?: 'StudentGoingOutTime', studentGoingOutTime?: { __typename?: 'StudentInOutTimeType', id: string, inTime?: any | null, outTime?: any | null } | null } | null };
+
+export type IntimeMutationVariables = Exact<{
+  username: Scalars['String'];
+}>;
+
+
+export type IntimeMutation = { __typename?: 'Mutation', inTime?: { __typename?: 'StudentGoingInTime', studentGoingInTime?: { __typename?: 'StudentInOutTimeType', id: string, inTime?: any | null, outTime?: any | null } | null } | null };
 
 export type UpdateStudMutationVariables = Exact<{
   course?: InputMaybe<Scalars['String']>;
@@ -566,6 +604,189 @@ export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQ
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
+export const UserComplaintsDocument = gql`
+    query userComplaints {
+  userComplaintsAll {
+    complaint
+    status
+    date
+  }
+}
+    `;
+
+/**
+ * __useUserComplaintsQuery__
+ *
+ * To run a query within a React component, call `useUserComplaintsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserComplaintsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserComplaintsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserComplaintsQuery(baseOptions?: Apollo.QueryHookOptions<UserComplaintsQuery, UserComplaintsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserComplaintsQuery, UserComplaintsQueryVariables>(UserComplaintsDocument, options);
+      }
+export function useUserComplaintsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserComplaintsQuery, UserComplaintsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserComplaintsQuery, UserComplaintsQueryVariables>(UserComplaintsDocument, options);
+        }
+export type UserComplaintsQueryHookResult = ReturnType<typeof useUserComplaintsQuery>;
+export type UserComplaintsLazyQueryHookResult = ReturnType<typeof useUserComplaintsLazyQuery>;
+export type UserComplaintsQueryResult = Apollo.QueryResult<UserComplaintsQuery, UserComplaintsQueryVariables>;
+export const AllComplaintsDocument = gql`
+    query allComplaints {
+  complaintsAll {
+    complaint
+    status
+    date
+  }
+}
+    `;
+
+/**
+ * __useAllComplaintsQuery__
+ *
+ * To run a query within a React component, call `useAllComplaintsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllComplaintsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllComplaintsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllComplaintsQuery(baseOptions?: Apollo.QueryHookOptions<AllComplaintsQuery, AllComplaintsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllComplaintsQuery, AllComplaintsQueryVariables>(AllComplaintsDocument, options);
+      }
+export function useAllComplaintsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllComplaintsQuery, AllComplaintsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllComplaintsQuery, AllComplaintsQueryVariables>(AllComplaintsDocument, options);
+        }
+export type AllComplaintsQueryHookResult = ReturnType<typeof useAllComplaintsQuery>;
+export type AllComplaintsLazyQueryHookResult = ReturnType<typeof useAllComplaintsLazyQuery>;
+export type AllComplaintsQueryResult = Apollo.QueryResult<AllComplaintsQuery, AllComplaintsQueryVariables>;
+export const CreateComplaintDocument = gql`
+    mutation createComplaint($complaint: String!) {
+  createComplaint(complaint: $complaint) {
+    complaint {
+      id
+      status
+      complaint
+    }
+  }
+}
+    `;
+export type CreateComplaintMutationFn = Apollo.MutationFunction<CreateComplaintMutation, CreateComplaintMutationVariables>;
+
+/**
+ * __useCreateComplaintMutation__
+ *
+ * To run a mutation, you first call `useCreateComplaintMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateComplaintMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createComplaintMutation, { data, loading, error }] = useCreateComplaintMutation({
+ *   variables: {
+ *      complaint: // value for 'complaint'
+ *   },
+ * });
+ */
+export function useCreateComplaintMutation(baseOptions?: Apollo.MutationHookOptions<CreateComplaintMutation, CreateComplaintMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateComplaintMutation, CreateComplaintMutationVariables>(CreateComplaintDocument, options);
+      }
+export type CreateComplaintMutationHookResult = ReturnType<typeof useCreateComplaintMutation>;
+export type CreateComplaintMutationResult = Apollo.MutationResult<CreateComplaintMutation>;
+export type CreateComplaintMutationOptions = Apollo.BaseMutationOptions<CreateComplaintMutation, CreateComplaintMutationVariables>;
+export const OuttimeDocument = gql`
+    mutation outtime($username: String!) {
+  outTime(username: $username) {
+    studentGoingOutTime {
+      id
+      inTime
+      outTime
+    }
+  }
+}
+    `;
+export type OuttimeMutationFn = Apollo.MutationFunction<OuttimeMutation, OuttimeMutationVariables>;
+
+/**
+ * __useOuttimeMutation__
+ *
+ * To run a mutation, you first call `useOuttimeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useOuttimeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [outtimeMutation, { data, loading, error }] = useOuttimeMutation({
+ *   variables: {
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useOuttimeMutation(baseOptions?: Apollo.MutationHookOptions<OuttimeMutation, OuttimeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<OuttimeMutation, OuttimeMutationVariables>(OuttimeDocument, options);
+      }
+export type OuttimeMutationHookResult = ReturnType<typeof useOuttimeMutation>;
+export type OuttimeMutationResult = Apollo.MutationResult<OuttimeMutation>;
+export type OuttimeMutationOptions = Apollo.BaseMutationOptions<OuttimeMutation, OuttimeMutationVariables>;
+export const IntimeDocument = gql`
+    mutation intime($username: String!) {
+  inTime(username: $username) {
+    studentGoingInTime {
+      id
+      inTime
+      outTime
+    }
+  }
+}
+    `;
+export type IntimeMutationFn = Apollo.MutationFunction<IntimeMutation, IntimeMutationVariables>;
+
+/**
+ * __useIntimeMutation__
+ *
+ * To run a mutation, you first call `useIntimeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useIntimeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [intimeMutation, { data, loading, error }] = useIntimeMutation({
+ *   variables: {
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useIntimeMutation(baseOptions?: Apollo.MutationHookOptions<IntimeMutation, IntimeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<IntimeMutation, IntimeMutationVariables>(IntimeDocument, options);
+      }
+export type IntimeMutationHookResult = ReturnType<typeof useIntimeMutation>;
+export type IntimeMutationResult = Apollo.MutationResult<IntimeMutation>;
+export type IntimeMutationOptions = Apollo.BaseMutationOptions<IntimeMutation, IntimeMutationVariables>;
 export const UpdateStudDocument = gql`
     mutation updateStud($course: String, $enrollmentNo: String, $fatherName: String, $studentName: String) {
   updateStudent(

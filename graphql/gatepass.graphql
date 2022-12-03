@@ -1,0 +1,19 @@
+mutation outtime($username: String!) {
+  outTime(username: $username) {
+    studentGoingOutTime {
+      id
+      inTime
+      outTime
+    }
+  }
+}
+
+mutation intime($username: String!) {
+  inTime(username: $username) {
+    studentGoingInTime {
+      id
+      inTime
+      outTime
+    }
+  }
+}

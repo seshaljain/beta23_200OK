@@ -14,7 +14,7 @@ export default function Navbar() {
       <h3 className="mt-4 font-bold uppercase">Actions</h3>
       <ul className="my-2 space-y-4">
         <li>
-          <Link href="#" className="text-lg" aria-disabled>
+          <Link href="/dashboard/student/gatepass" className="text-lg">
             Generate Gate Pass
           </Link>
         </li>

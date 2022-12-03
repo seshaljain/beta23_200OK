@@ -1,54 +1,127 @@
 import DashboardLayout from '../../../components/layouts/dashboard'
 import { Formik, Field, Form } from 'formik'
+import { useUserComplaintsQuery } from '../../../graphql/generated'
+import { useMutation, gql } from '@apollo/client'
+
+const GET_COMPLAINTS = gql`
+  query userComplaints {
+    userComplaintsAll {
+      complaint
+      status
+      date
+    }
+  }
+`
+
+const CREATE_COMPLAINT = gql`
+  mutation createComplaint($complaint: String!) {
+    createComplaint(complaint: $complaint) {
+      complaint {
+        id
+        status
+        complaint
+      }
+    }
+  }
+`
 
 const styles = {
   label: 'block uppercase text-sm font-bold mt-4',
   field: 'p-2 mt-1 rounded border border-gray-200 border-2',
 }
 
-const dummyData = [
+const committeeData = [
   {
     id: 1,
-    title: 'In hac habitasse platea dictumst.',
-    subDate: '2022-08-05T19:46:51Z',
-    status: 'scheduled',
+    name: 'Lucais Wrennall',
+    committee: 'Hygiene',
+    phoneNum: '+917338122121',
   },
   {
     id: 2,
-    title: 'Aenean lectus.',
-    subDate: '2022-03-10T13:30:40Z',
-    status: 'done',
+    name: "Saba O'Connel",
+    committee: 'Mess',
+    phoneNum: '+917364421090',
   },
   {
     id: 3,
-    title: 'Donec ut dolor.',
-    subDate: '2022-11-06T05:07:12Z',
-    status: 'review',
+    name: 'Dasie Cranney',
+    committee: 'Disciplinary',
+    phoneNum: '+917315501302',
   },
   {
     id: 4,
-    title: 'Suspendisse accumsan tortor quis turpis.',
-    subDate: '2022-05-02T05:17:53Z',
-    status: 'scheduled',
+    name: 'Dunstan McCraine',
+    committee: 'Hygiene',
+    phoneNum: '+917385203808',
   },
   {
     id: 5,
-    title: 'In eleifend quam a odio.',
-    subDate: '2022-01-19T05:08:37Z',
-    status: 'done',
+    name: 'Evaleen Cool',
+    committee: 'Mess',
+    phoneNum: '+917329852817',
+  },
+  {
+    id: 6,
+    name: 'Ambrosius Volante',
+    committee: 'Disciplinary',
+    phoneNum: '+917316758627',
+  },
+  {
+    id: 7,
+    name: 'Parsifal Matschke',
+    committee: 'Hygiene',
+    phoneNum: '+917372675260',
+  },
+  {
+    id: 8,
+    name: 'Maximilien Comizzoli',
+    committee: 'Mess',
+    phoneNum: '+917352079280',
+  },
+  {
+    id: 9,
+    name: 'Brietta Aldie',
+    committee: 'Disciplinary',
+    phoneNum: '+917398947962',
+  },
+  {
+    id: 10,
+    name: 'Stoddard Franken',
+    committee: 'Hygiene',
+    phoneNum: '+917365127676',
+  },
+  {
+    id: 11,
+    name: 'Tan Sepey',
+    committee: 'Mess',
+    phoneNum: '+917393513163',
+  },
+  {
+    id: 12,
+    name: 'Ralph Garrat',
+    committee: 'Disciplinary',
+    phoneNum: '+917331410192',
   },
 ]
 
 export default function Complaints() {
+  const [createComplaint] = useMutation(CREATE_COMPLAINT, {
+    refetchQueries: [{ query: GET_COMPLAINTS }, 'Get user complaints'],
+  })
+  const { data } = useUserComplaintsQuery()
+
   return (
     <DashboardLayout title="Complaints">
-    <p>//TODO: Emergency Contact Cards</p>
-      <h2>Submit new complaint</h2>
+      <h2 className="mt-8 text-2xl font-bold">Submit new complaint</h2>
       <Formik
-        initialValues={{ name: '', email: '' }}
+        initialValues={{ title: '' }}
         onSubmit={async (values) => {
-          await new Promise((resolve) => setTimeout(resolve, 500))
-          alert(JSON.stringify(values, null, 2))
+          createComplaint({
+            variables: {
+              complaint: values.title,
+            },
+          })
         }}
       >
         <Form>
@@ -56,15 +129,6 @@ export default function Complaints() {
             Title
           </label>
           <Field className={styles.field} id="title" name="title" type="text" />
-          <label className={styles.label} htmlFor="subDate">
-            Submission Date
-          </label>
-          <Field
-            className={styles.field}
-            id="subDate"
-            name="subDate"
-            type="date"
-          />
           <div className="mt-8">
             <button
               type="submit"
@@ -88,17 +152,30 @@ export default function Complaints() {
           </tr>
         </thead>
         <tbody>
-          {dummyData.map((c) => {
+          {data?.userComplaintsAll.map((c) => {
             return (
               <tr className="py-4" key={c.id}>
-                <td>{c.title}</td>
-                <td>{c.status}</td>
+                <td>{c.complaint}</td>
                 <td>{c.subDate}</td>
+                <td>{c.status}</td>
               </tr>
             )
           })}
         </tbody>
       </table>
+
+      <h2 className="mt-8 text-2xl font-bold">
+        Emergency Committee Member Details
+      </h2>
+      <div className="flex flex-wrap">
+        {committeeData.map((c) => (
+          <div key={c.id} className="p-4 m-4 bg-white rounded shadow">
+            <p className="font-bold">{c.name}</p>
+            <p>{c.committee} Committee</p>
+            <p>{c.phoneNum}</p>
+          </div>
+        ))}
+      </div>
     </DashboardLayout>
   )
 }

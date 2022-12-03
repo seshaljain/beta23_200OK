@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { useSession, signOut } from 'next-auth/react'
 
 export default function Layout({ children, title }) {
-  const {data: session} = useSession()
+  const { data: session } = useSession()
   const titleText = `${title} | HMS`
   return (
     <>
@@ -27,7 +27,7 @@ export default function Layout({ children, title }) {
       </nav>
       <main className="flex flex-wrap bg-gray-50">
         <Sidebar />
-        <div className="p-4">
+        <div className="flex-1 p-4">
           <h1 className="text-2xl font-medium uppercase">{title}</h1>
           <article>{children}</article>
         </div>
