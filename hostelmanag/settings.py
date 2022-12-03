@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     
     'user',
     'ridesharing',
+    'posting',
 ]
 
 AUTH_USER_MODEL = 'user.AbstractHostelUser'
