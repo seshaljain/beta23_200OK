@@ -25,11 +25,6 @@ const CREATE_COMPLAINT = gql`
   }
 `
 
-const styles = {
-  label: 'block uppercase text-sm font-bold mt-4',
-  field: 'p-2 mt-1 rounded border border-gray-200 border-2',
-}
-
 const committeeData = [
   {
     id: 1,
@@ -125,10 +120,10 @@ export default function Complaints() {
         }}
       >
         <Form>
-          <label className={styles.label} htmlFor="title">
+          <label className="label" htmlFor="title">
             Title
           </label>
-          <Field className={styles.field} id="title" name="title" type="text" />
+          <Field className="field" id="title" name="title" type="text" />
           <div className="mt-8">
             <button
               type="submit"

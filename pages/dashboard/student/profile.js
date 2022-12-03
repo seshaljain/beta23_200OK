@@ -6,11 +6,6 @@ import {
   useProfileQuery,
 } from '../../../graphql/generated'
 
-const styles = {
-  label: 'block uppercase text-sm font-bold mt-4',
-  field: 'p-2 mt-1 rounded border border-gray-200 border-2',
-}
-
 const UPDATE_STUD = gql`
   mutation updateStud(
     $course: String
@@ -83,41 +78,41 @@ export default function Profile() {
         }}
       >
         <Form>
-          <label className={styles.label} htmlFor="name">
+          <label className="label" htmlFor="name">
             Student Name
           </label>
           <Field
-            className={styles.field}
+            className="field"
             id="studentName"
             name="studentName"
             type="text"
             placeholder="Your name"
           />
-          <label className={styles.label} htmlFor="fatherName">
+          <label className="label" htmlFor="fatherName">
             Father's Name
           </label>
           <Field
-            className={styles.field}
+            className="field"
             id="fatherName"
             name="fatherName"
             type="text"
             placeholder="Your father's name"
           />
-          <label className={styles.label} htmlFor="enrNum">
+          <label className="label" htmlFor="enrNum">
             Enrollment Number
           </label>
           <Field
-            className={styles.field}
+            className="field"
             id="enrNum"
             name="enrNum"
             type="text"
             placeholder="191112000"
           />
-          <label className={styles.label} htmlFor="course">
+          <label className="label" htmlFor="course">
             Course
           </label>
           <Field
-            className={styles.field}
+            className="field"
             id="course"
             name="course"
             type="text"

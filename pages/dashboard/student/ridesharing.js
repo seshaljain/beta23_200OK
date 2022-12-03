@@ -7,10 +7,6 @@ import {
   useAllRidesQuery,
 } from '../../../graphql/generated'
 
-const styles = {
-  label: 'block uppercase text-sm font-bold mt-4',
-  field: 'p-2 mt-1 rounded border border-gray-200 border-2',
-}
 
 const CREATE_RIDE = gql`
   mutation createRide(
@@ -91,38 +87,38 @@ export default function Posts() {
         }}
       >
         <Form>
-          <label className={styles.label} htmlFor="startTime">
+          <label className="label" htmlFor="startTime">
             Start time
           </label>
           <Field
-            className={styles.field}
+            className="field"
             id="startTime"
             name="startTime"
             type="datetime-local"
           />
-          <label className={styles.label} htmlFor="endTime">
+          <label className="label" htmlFor="endTime">
             End time
           </label>
           <Field
-            className={styles.field}
+            className="field"
             id="endTime"
             name="endTime"
             type="datetime-local"
           />
-          <label className={styles.label} htmlFor="hasVehicle">
+          <label className="label" htmlFor="hasVehicle">
             Vehicle Type
           </label>
           <Field
-            className={styles.field}
+            className="field"
             id="vehicleType"
             name="vehicleType"
             type="text"
           />
-          <label className={styles.label} htmlFor="hasVehicle">
+          <label className="label" htmlFor="hasVehicle">
             Have your own vehicle?
           </label>
           <Field
-            className={styles.field}
+            className="field"
             id="hasVehicle"
             name="hasVehicle"
             type="checkbox"

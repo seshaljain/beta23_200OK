@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .label {
+    @apply block mt-4 text-sm font-bold uppercase;
+  }
+  .field {
+    @apply p-2 mt-1 border-2 border-gray-200 rounded;
+  }
+}
