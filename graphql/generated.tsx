@@ -236,6 +236,7 @@ export type Query = {
   allPosts?: Maybe<Array<Maybe<PostType>>>;
   allRides?: Maybe<Array<Maybe<RideType>>>;
   allStudentInOutTimes?: Maybe<Array<Maybe<StudentInOutTimeType>>>;
+  allStudentInOutTimesToday?: Maybe<Array<Maybe<StudentInOutTimeType>>>;
   allWardens?: Maybe<Array<Maybe<WardenType>>>;
   complaintsAll?: Maybe<Array<Maybe<ComplaintType>>>;
   getAllStudents?: Maybe<Array<Maybe<StudentType>>>;
@@ -485,6 +486,18 @@ export type IntimeMutationVariables = Exact<{
 
 
 export type IntimeMutation = { __typename?: 'Mutation', inTime?: { __typename?: 'StudentGoingInTime', studentGoingInTime?: { __typename?: 'StudentInOutTimeType', id: string, inTime?: any | null, outTime?: any | null } | null } | null };
+
+export type ListLogsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ListLogsQuery = { __typename?: 'Query', allStudentInOutTimesToday?: Array<{ __typename?: 'StudentInOutTimeType', id: string, inTime?: any | null, outTime?: any | null, date: any, student: { __typename?: 'StudentType', studentName?: string | null, enrollmentNo?: string | null } } | null> | null };
+
+export type SetInTimeMutationVariables = Exact<{
+  username: Scalars['String'];
+}>;
+
+
+export type SetInTimeMutation = { __typename?: 'Mutation', inTime?: { __typename?: 'StudentGoingInTime', studentGoingInTime?: { __typename?: 'StudentInOutTimeType', id: string } | null } | null };
 
 export type AllPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -864,6 +877,82 @@ export function useIntimeMutation(baseOptions?: Apollo.MutationHookOptions<Intim
 export type IntimeMutationHookResult = ReturnType<typeof useIntimeMutation>;
 export type IntimeMutationResult = Apollo.MutationResult<IntimeMutation>;
 export type IntimeMutationOptions = Apollo.BaseMutationOptions<IntimeMutation, IntimeMutationVariables>;
+export const ListLogsDocument = gql`
+    query listLogs {
+  allStudentInOutTimesToday {
+    id
+    student {
+      studentName
+      enrollmentNo
+    }
+    inTime
+    outTime
+    date
+  }
+}
+    `;
+
+/**
+ * __useListLogsQuery__
+ *
+ * To run a query within a React component, call `useListLogsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListLogsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListLogsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useListLogsQuery(baseOptions?: Apollo.QueryHookOptions<ListLogsQuery, ListLogsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ListLogsQuery, ListLogsQueryVariables>(ListLogsDocument, options);
+      }
+export function useListLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListLogsQuery, ListLogsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ListLogsQuery, ListLogsQueryVariables>(ListLogsDocument, options);
+        }
+export type ListLogsQueryHookResult = ReturnType<typeof useListLogsQuery>;
+export type ListLogsLazyQueryHookResult = ReturnType<typeof useListLogsLazyQuery>;
+export type ListLogsQueryResult = Apollo.QueryResult<ListLogsQuery, ListLogsQueryVariables>;
+export const SetInTimeDocument = gql`
+    mutation setInTime($username: String!) {
+  inTime(username: $username) {
+    studentGoingInTime {
+      id
+    }
+  }
+}
+    `;
+export type SetInTimeMutationFn = Apollo.MutationFunction<SetInTimeMutation, SetInTimeMutationVariables>;
+
+/**
+ * __useSetInTimeMutation__
+ *
+ * To run a mutation, you first call `useSetInTimeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetInTimeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setInTimeMutation, { data, loading, error }] = useSetInTimeMutation({
+ *   variables: {
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useSetInTimeMutation(baseOptions?: Apollo.MutationHookOptions<SetInTimeMutation, SetInTimeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetInTimeMutation, SetInTimeMutationVariables>(SetInTimeDocument, options);
+      }
+export type SetInTimeMutationHookResult = ReturnType<typeof useSetInTimeMutation>;
+export type SetInTimeMutationResult = Apollo.MutationResult<SetInTimeMutation>;
+export type SetInTimeMutationOptions = Apollo.BaseMutationOptions<SetInTimeMutation, SetInTimeMutationVariables>;
 export const AllPostsDocument = gql`
     query allPosts {
   allPosts {

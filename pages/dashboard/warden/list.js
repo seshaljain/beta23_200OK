@@ -42,7 +42,10 @@ export default function List() {
                   <tbody class="bg-white divide-y divide-gray-200 ">
                     {data?.getAllStudents.map((student) => {
                       return (
-                        <tr key={student.id}>
+                        <tr
+                          key={student.id}
+                          onClick={() => <Model id={student.id} show={true} />}
+                        >
                           <td class="py-4 px-6 text-sm font-medium whitespace-nowrap">
                             {student.studentName}
                           </td>

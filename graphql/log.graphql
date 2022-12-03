@@ -1,0 +1,20 @@
+query listLogs {
+  allStudentInOutTimesToday {
+    id
+    student {
+      studentName
+      enrollmentNo
+    }
+    inTime
+    outTime
+    date
+  }
+}
+
+mutation setInTime($username: String!) {
+  inTime(username: $username) {
+    studentGoingInTime {
+      id
+    }
+  }
+}
