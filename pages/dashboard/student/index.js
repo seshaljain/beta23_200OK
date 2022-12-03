@@ -3,7 +3,6 @@ import { useUserQuery } from '../../../graphql/generated'
 
 function Student() {
   const { data } = useUserQuery()
-  console.log(data)
   return (
     <DashboardLayout>
       <div>{data?.me?.id}</div>

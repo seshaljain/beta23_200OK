@@ -32,6 +32,11 @@ export type CreateComplaint = {
   complaint?: Maybe<ComplaintType>;
 };
 
+export type CreateRide = {
+  __typename?: 'CreateRide';
+  ride?: Maybe<RideType>;
+};
+
 export type CreateStudent = {
   __typename?: 'CreateStudent';
   student?: Maybe<StudentType>;
@@ -40,8 +45,9 @@ export type CreateStudent = {
 export type Mutation = {
   __typename?: 'Mutation';
   createComplaint?: Maybe<CreateComplaint>;
+  createRide?: Maybe<CreateRide>;
   createStudent?: Maybe<CreateStudent>;
-  inTime?: Maybe<StudentComingBackTime>;
+  inTime?: Maybe<StudentGoingInTime>;
   outTime?: Maybe<StudentGoingOutTime>;
   /**
    * Register user with fields defined in the settings.
@@ -85,6 +91,7 @@ export type Mutation = {
    */
   updateAccount?: Maybe<UpdateAccount>;
   updateComplaint?: Maybe<UpdateComplaint>;
+  updateRide?: Maybe<UpdateRide>;
   updateStudent?: Maybe<UpdateStudent>;
   /**
    * Verify user account.
@@ -102,18 +109,25 @@ export type MutationCreateComplaintArgs = {
 };
 
 
+export type MutationCreateRideArgs = {
+  hasVehicle?: InputMaybe<Scalars['Boolean']>;
+  startTime?: InputMaybe<Scalars['DateTime']>;
+  vehicleType?: InputMaybe<Scalars['String']>;
+};
+
+
 export type MutationCreateStudentArgs = {
   name?: InputMaybe<Scalars['String']>;
 };
 
 
 export type MutationInTimeArgs = {
-  comingBackTime?: InputMaybe<Scalars['String']>;
+  username: Scalars['String'];
 };
 
 
 export type MutationOutTimeArgs = {
-  goingOutTime?: InputMaybe<Scalars['String']>;
+  username: Scalars['String'];
 };
 
 
@@ -142,6 +156,14 @@ export type MutationUpdateAccountArgs = {
 export type MutationUpdateComplaintArgs = {
   id: Scalars['Int'];
   status: Scalars['String'];
+};
+
+
+export type MutationUpdateRideArgs = {
+  finished?: InputMaybe<Scalars['Boolean']>;
+  hasVehicle?: InputMaybe<Scalars['Boolean']>;
+  id?: InputMaybe<Scalars['Int']>;
+  vehicleType?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -189,10 +211,29 @@ export type ObtainJsonWebToken = {
 
 export type Query = {
   __typename?: 'Query';
+  allRides?: Maybe<Array<Maybe<RideType>>>;
+  allStudentInOutTimes?: Maybe<Array<Maybe<StudentInOutTimeType>>>;
   complaintsAll?: Maybe<Array<Maybe<ComplaintType>>>;
   me?: Maybe<UserNode>;
+  studentInOutTime?: Maybe<StudentInOutTimeType>;
+  studentInOutTimes?: Maybe<Array<Maybe<StudentInOutTimeType>>>;
   userComplaint?: Maybe<ComplaintType>;
   userComplaintsAll?: Maybe<Array<Maybe<ComplaintType>>>;
+};
+
+
+export type QueryAllRidesArgs = {
+  onlyNotFinished?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+export type QueryStudentInOutTimeArgs = {
+  id?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryStudentInOutTimesArgs = {
+  username?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -227,9 +268,13 @@ export type Register = {
   token?: Maybe<Scalars['String']>;
 };
 
-export type StudentComingBackTime = {
-  __typename?: 'StudentComingBackTime';
-  studentComingBackTime?: Maybe<StudentInOutTimeType>;
+export type RideType = {
+  __typename?: 'RideType';
+  finished: Scalars['Boolean'];
+  hasVehicle: Scalars['Boolean'];
+  id: Scalars['ID'];
+  startTime?: Maybe<Scalars['DateTime']>;
+  vehicleType: Scalars['String'];
 };
 
 /** An enumeration. */
@@ -240,6 +285,11 @@ export enum StudentGender {
   M = 'M'
 }
 
+export type StudentGoingInTime = {
+  __typename?: 'StudentGoingInTime';
+  studentGoingInTime?: Maybe<StudentInOutTimeType>;
+};
+
 export type StudentGoingOutTime = {
   __typename?: 'StudentGoingOutTime';
   studentGoingOutTime?: Maybe<StudentInOutTimeType>;
@@ -249,8 +299,8 @@ export type StudentInOutTimeType = {
   __typename?: 'StudentInOutTimeType';
   date: Scalars['Date'];
   id: Scalars['ID'];
-  inTime: Scalars['DateTime'];
-  outTime: Scalars['DateTime'];
+  inTime?: Maybe<Scalars['DateTime']>;
+  outTime?: Maybe<Scalars['DateTime']>;
   student: StudentType;
 };
 
@@ -283,6 +333,11 @@ export type UpdateComplaint = {
   complaint?: Maybe<ComplaintType>;
 };
 
+export type UpdateRide = {
+  __typename?: 'UpdateRide';
+  ride?: Maybe<RideType>;
+};
+
 export type UpdateStudent = {
   __typename?: 'UpdateStudent';
   student?: Maybe<StudentType>;
@@ -304,6 +359,7 @@ export type UserNode = Node & {
   lastLogin?: Maybe<Scalars['DateTime']>;
   lastName: Scalars['String'];
   pk?: Maybe<Scalars['Int']>;
+  rideSet: Array<RideType>;
   secondaryEmail?: Maybe<Scalars['String']>;
   student?: Maybe<StudentType>;
   /** Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only. */
@@ -332,10 +388,37 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = { __typename?: 'Mutation', tokenAuth?: { __typename?: 'ObtainJSONWebToken', token?: string | null, success?: boolean | null, user?: { __typename?: 'UserNode', id: string, username: string } | null } | null };
 
+export type RegisterMutationVariables = Exact<{
+  email: Scalars['String'];
+  username: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type RegisterMutation = { __typename?: 'Mutation', register?: { __typename?: 'Register', success?: boolean | null, token?: string | null } | null };
+
+export type VerifyTokMutationVariables = Exact<{
+  token: Scalars['String'];
+}>;
+
+
+export type VerifyTokMutation = { __typename?: 'Mutation', verifyAccount?: { __typename?: 'VerifyAccount', success?: boolean | null, errors?: any | null } | null };
+
 export type UserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserQuery = { __typename?: 'Query', me?: { __typename?: 'UserNode', id: string, username: string } | null };
+export type UserQuery = { __typename?: 'Query', me?: { __typename?: 'UserNode', id: string, username: string, isStudent: boolean } | null };
+
+export type UpdateStudMutationVariables = Exact<{
+  course?: InputMaybe<Scalars['String']>;
+  dob?: InputMaybe<Scalars['String']>;
+  enrollmentNo?: InputMaybe<Scalars['String']>;
+  fatherName?: InputMaybe<Scalars['String']>;
+  gender?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type UpdateStudMutation = { __typename?: 'Mutation', updateStudent?: { __typename?: 'UpdateStudent', student?: { __typename?: 'StudentType', id: string, enrollmentNo?: string | null, studentName?: string | null, fatherName?: string | null } | null } | null };
 
 
 export const LoginDocument = gql`
@@ -377,11 +460,87 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const RegisterDocument = gql`
+    mutation register($email: String!, $username: String!, $password: String!) {
+  register(
+    email: $email
+    username: $username
+    password1: $password
+    password2: $password
+  ) {
+    success
+    token
+  }
+}
+    `;
+export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, RegisterMutationVariables>;
+
+/**
+ * __useRegisterMutation__
+ *
+ * To run a mutation, you first call `useRegisterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRegisterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [registerMutation, { data, loading, error }] = useRegisterMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      username: // value for 'username'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, options);
+      }
+export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
+export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
+export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const VerifyTokDocument = gql`
+    mutation verifyTok($token: String!) {
+  verifyAccount(token: $token) {
+    success
+    errors
+  }
+}
+    `;
+export type VerifyTokMutationFn = Apollo.MutationFunction<VerifyTokMutation, VerifyTokMutationVariables>;
+
+/**
+ * __useVerifyTokMutation__
+ *
+ * To run a mutation, you first call `useVerifyTokMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVerifyTokMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [verifyTokMutation, { data, loading, error }] = useVerifyTokMutation({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useVerifyTokMutation(baseOptions?: Apollo.MutationHookOptions<VerifyTokMutation, VerifyTokMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<VerifyTokMutation, VerifyTokMutationVariables>(VerifyTokDocument, options);
+      }
+export type VerifyTokMutationHookResult = ReturnType<typeof useVerifyTokMutation>;
+export type VerifyTokMutationResult = Apollo.MutationResult<VerifyTokMutation>;
+export type VerifyTokMutationOptions = Apollo.BaseMutationOptions<VerifyTokMutation, VerifyTokMutationVariables>;
 export const UserDocument = gql`
     query user {
   me {
     id
     username
+    isStudent
   }
 }
     `;
@@ -412,3 +571,51 @@ export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQ
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
+export const UpdateStudDocument = gql`
+    mutation updateStud($course: String, $dob: String, $enrollmentNo: String, $fatherName: String, $gender: String) {
+  updateStudent(
+    course: $course
+    dob: $dob
+    enrollmentNo: $enrollmentNo
+    fatherName: $fatherName
+    gender: $gender
+  ) {
+    student {
+      id
+      enrollmentNo
+      studentName
+      fatherName
+    }
+  }
+}
+    `;
+export type UpdateStudMutationFn = Apollo.MutationFunction<UpdateStudMutation, UpdateStudMutationVariables>;
+
+/**
+ * __useUpdateStudMutation__
+ *
+ * To run a mutation, you first call `useUpdateStudMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateStudMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateStudMutation, { data, loading, error }] = useUpdateStudMutation({
+ *   variables: {
+ *      course: // value for 'course'
+ *      dob: // value for 'dob'
+ *      enrollmentNo: // value for 'enrollmentNo'
+ *      fatherName: // value for 'fatherName'
+ *      gender: // value for 'gender'
+ *   },
+ * });
+ */
+export function useUpdateStudMutation(baseOptions?: Apollo.MutationHookOptions<UpdateStudMutation, UpdateStudMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateStudMutation, UpdateStudMutationVariables>(UpdateStudDocument, options);
+      }
+export type UpdateStudMutationHookResult = ReturnType<typeof useUpdateStudMutation>;
+export type UpdateStudMutationResult = Apollo.MutationResult<UpdateStudMutation>;
+export type UpdateStudMutationOptions = Apollo.BaseMutationOptions<UpdateStudMutation, UpdateStudMutationVariables>;

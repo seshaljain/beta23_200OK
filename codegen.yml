@@ -1,5 +1,6 @@
 overwrite: true
 schema: http://10.12.2.154:8000/graphql/
+# schema: http://127.0.0.1:8000/graphql/
 documents: graphql/**/*.graphql
 generates:
   graphql/generated.tsx:
