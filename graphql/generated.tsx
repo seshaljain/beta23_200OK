@@ -32,6 +32,11 @@ export type CreateComplaint = {
   complaint?: Maybe<ComplaintType>;
 };
 
+export type CreateMessNotEating = {
+  __typename?: 'CreateMessNotEating';
+  messNotEating?: Maybe<MessNotEatingType>;
+};
+
 export type CreatePost = {
   __typename?: 'CreatePost';
   post?: Maybe<PostType>;
@@ -47,9 +52,26 @@ export type CreateStudent = {
   student?: Maybe<StudentType>;
 };
 
+export type InfoType = {
+  __typename?: 'InfoType';
+  complaintsPendingCnt?: Maybe<Scalars['Int']>;
+  daysGoneOut?: Maybe<Array<Maybe<StudentInOutTimeType>>>;
+  daysGoneOutCnt?: Maybe<Scalars['Int']>;
+  messNotEating?: Maybe<Array<Maybe<MessNotEatingType>>>;
+  messNotEatingCnt?: Maybe<Scalars['Int']>;
+};
+
+export type MessNotEatingType = {
+  __typename?: 'MessNotEatingType';
+  date: Scalars['Date'];
+  id: Scalars['ID'];
+  student: StudentType;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createComplaint?: Maybe<CreateComplaint>;
+  createMessNotEating?: Maybe<CreateMessNotEating>;
   createPost?: Maybe<CreatePost>;
   createRide?: Maybe<CreateRide>;
   createStudent?: Maybe<CreateStudent>;
@@ -242,11 +264,14 @@ export type Query = {
   getAllStudents?: Maybe<Array<Maybe<StudentType>>>;
   getStudent?: Maybe<StudentType>;
   me?: Maybe<UserNode>;
+  messNotEatingToday?: Maybe<Array<Maybe<MessNotEatingType>>>;
   post?: Maybe<PostType>;
   studentInOutTime?: Maybe<StudentInOutTimeType>;
   studentInOutTimes?: Maybe<Array<Maybe<StudentInOutTimeType>>>;
+  studentNotEaten?: Maybe<Array<Maybe<MessNotEatingType>>>;
   userComplaint?: Maybe<ComplaintType>;
   userComplaintsAll?: Maybe<Array<Maybe<ComplaintType>>>;
+  userInfo?: Maybe<InfoType>;
   warden?: Maybe<WardenType>;
 };
 
@@ -261,6 +286,11 @@ export type QueryGetStudentArgs = {
 };
 
 
+export type QueryMessNotEatingTodayArgs = {
+  date?: InputMaybe<Scalars['Date']>;
+};
+
+
 export type QueryPostArgs = {
   id?: InputMaybe<Scalars['Int']>;
 };
@@ -272,6 +302,11 @@ export type QueryStudentInOutTimeArgs = {
 
 
 export type QueryStudentInOutTimesArgs = {
+  username?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryStudentNotEatenArgs = {
   username?: InputMaybe<Scalars['String']>;
 };
 
@@ -349,6 +384,7 @@ export type StudentType = {
   enrollmentNo?: Maybe<Scalars['String']>;
   fatherName?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
+  messnoteatingSet: Array<MessNotEatingType>;
   noDues: Scalars['Boolean'];
   postSet: Array<PostType>;
   rideSet: Array<RideType>;
@@ -499,6 +535,11 @@ export type SetInTimeMutationVariables = Exact<{
 
 export type SetInTimeMutation = { __typename?: 'Mutation', inTime?: { __typename?: 'StudentGoingInTime', studentGoingInTime?: { __typename?: 'StudentInOutTimeType', id: string } | null } | null };
 
+export type CreateMessNotEatingMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CreateMessNotEatingMutation = { __typename?: 'Mutation', createMessNotEating?: { __typename?: 'CreateMessNotEating', messNotEating?: { __typename?: 'MessNotEatingType', id: string, date: any, student: { __typename?: 'StudentType', studentName?: string | null } } | null } | null };
+
 export type AllPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -518,6 +559,11 @@ export type ProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ProfileQuery = { __typename?: 'Query', me?: { __typename?: 'UserNode', student?: { __typename?: 'StudentType', id: string, enrollmentNo?: string | null, studentName?: string | null, fatherName?: string | null, course?: string | null } | null } | null };
+
+export type UserinfoQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserinfoQuery = { __typename?: 'Query', userInfo?: { __typename?: 'InfoType', messNotEatingCnt?: number | null, daysGoneOutCnt?: number | null, complaintsPendingCnt?: number | null, messNotEating?: Array<{ __typename?: 'MessNotEatingType', id: string, date: any, student: { __typename?: 'StudentType', studentName?: string | null } } | null> | null, daysGoneOut?: Array<{ __typename?: 'StudentInOutTimeType', id: string, date: any, inTime?: any | null, outTime?: any | null, student: { __typename?: 'StudentType', studentName?: string | null } } | null> | null } | null };
 
 export type AllRidesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -953,6 +999,44 @@ export function useSetInTimeMutation(baseOptions?: Apollo.MutationHookOptions<Se
 export type SetInTimeMutationHookResult = ReturnType<typeof useSetInTimeMutation>;
 export type SetInTimeMutationResult = Apollo.MutationResult<SetInTimeMutation>;
 export type SetInTimeMutationOptions = Apollo.BaseMutationOptions<SetInTimeMutation, SetInTimeMutationVariables>;
+export const CreateMessNotEatingDocument = gql`
+    mutation createMessNotEating {
+  createMessNotEating {
+    messNotEating {
+      id
+      student {
+        studentName
+      }
+      date
+    }
+  }
+}
+    `;
+export type CreateMessNotEatingMutationFn = Apollo.MutationFunction<CreateMessNotEatingMutation, CreateMessNotEatingMutationVariables>;
+
+/**
+ * __useCreateMessNotEatingMutation__
+ *
+ * To run a mutation, you first call `useCreateMessNotEatingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMessNotEatingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMessNotEatingMutation, { data, loading, error }] = useCreateMessNotEatingMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCreateMessNotEatingMutation(baseOptions?: Apollo.MutationHookOptions<CreateMessNotEatingMutation, CreateMessNotEatingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateMessNotEatingMutation, CreateMessNotEatingMutationVariables>(CreateMessNotEatingDocument, options);
+      }
+export type CreateMessNotEatingMutationHookResult = ReturnType<typeof useCreateMessNotEatingMutation>;
+export type CreateMessNotEatingMutationResult = Apollo.MutationResult<CreateMessNotEatingMutation>;
+export type CreateMessNotEatingMutationOptions = Apollo.BaseMutationOptions<CreateMessNotEatingMutation, CreateMessNotEatingMutationVariables>;
 export const AllPostsDocument = gql`
     query allPosts {
   allPosts {
@@ -1082,6 +1166,58 @@ export function useProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Pr
 export type ProfileQueryHookResult = ReturnType<typeof useProfileQuery>;
 export type ProfileLazyQueryHookResult = ReturnType<typeof useProfileLazyQuery>;
 export type ProfileQueryResult = Apollo.QueryResult<ProfileQuery, ProfileQueryVariables>;
+export const UserinfoDocument = gql`
+    query userinfo {
+  userInfo {
+    messNotEating {
+      id
+      student {
+        studentName
+      }
+      date
+    }
+    daysGoneOut {
+      id
+      date
+      inTime
+      outTime
+      student {
+        studentName
+      }
+    }
+    messNotEatingCnt
+    daysGoneOutCnt
+    complaintsPendingCnt
+  }
+}
+    `;
+
+/**
+ * __useUserinfoQuery__
+ *
+ * To run a query within a React component, call `useUserinfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserinfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserinfoQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserinfoQuery(baseOptions?: Apollo.QueryHookOptions<UserinfoQuery, UserinfoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserinfoQuery, UserinfoQueryVariables>(UserinfoDocument, options);
+      }
+export function useUserinfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserinfoQuery, UserinfoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserinfoQuery, UserinfoQueryVariables>(UserinfoDocument, options);
+        }
+export type UserinfoQueryHookResult = ReturnType<typeof useUserinfoQuery>;
+export type UserinfoLazyQueryHookResult = ReturnType<typeof useUserinfoLazyQuery>;
+export type UserinfoQueryResult = Apollo.QueryResult<UserinfoQuery, UserinfoQueryVariables>;
 export const AllRidesDocument = gql`
     query allRides {
   allRides {

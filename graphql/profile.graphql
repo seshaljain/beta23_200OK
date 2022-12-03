@@ -31,3 +31,27 @@ query profile {
     }
   }
 }
+
+query userinfo {
+  userInfo {
+    messNotEating {
+      id
+      student {
+        studentName
+      }
+      date
+    }
+    daysGoneOut {
+      id
+      date
+      inTime
+      outTime
+      student {
+        studentName
+      }
+    }
+    messNotEatingCnt
+    daysGoneOutCnt
+    complaintsPendingCnt
+  }
+}

@@ -1,10 +1,8 @@
-import Sidebar from './sidebar.js'
 import Link from 'next/link'
 import Head from 'next/head'
 import { useSession, signOut } from 'next-auth/react'
 
 export default function Layout({ children, title }) {
-  const { data: session } = useSession()
   const titleText = `${title} | HMS`
   return (
     <main className="min-h-screen bg-emerald-50">
@@ -17,7 +15,7 @@ export default function Layout({ children, title }) {
         </h2>
         <div>
           <button
-            onClick={() => signOut()}
+            onClick={() => signOut({ callbackUrl: '/' })}
             className="px-3 py-2 m-2 ml-4 rounded bg-emerald-500 hover:shadow"
           >
             Logout
@@ -38,6 +36,9 @@ export default function Layout({ children, title }) {
             </li>
             <li className="px-3 py-2 mt-4 text-lg rounded md:px-6 md:py-2 bg-slate-100 text-slate-600">
               <Link href="/dashboard/student/ridesharing">Rides</Link>
+            </li>
+            <li className="px-3 py-2 mt-4 text-lg rounded md:px-6 md:py-2 bg-slate-100 text-slate-600">
+              <Link href="/dashboard/student/mess">Mess</Link>
             </li>
           </ul>
         </div>

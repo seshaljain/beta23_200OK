@@ -1,0 +1,11 @@
+mutation createMessNotEating {
+  createMessNotEating {
+    messNotEating {
+      id
+      student {
+        studentName
+      }
+      date
+    }
+  }
+}
