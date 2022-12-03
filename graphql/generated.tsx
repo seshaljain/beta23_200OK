@@ -551,6 +551,11 @@ export type CreateMessNotEatingMutationVariables = Exact<{ [key: string]: never;
 
 export type CreateMessNotEatingMutation = { __typename?: 'Mutation', createMessNotEating?: { __typename?: 'CreateMessNotEating', messNotEating?: { __typename?: 'MessNotEatingType', id: string, date: any, student: { __typename?: 'StudentType', studentName?: string | null } } | null } | null };
 
+export type MessNotEatingTodayQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MessNotEatingTodayQuery = { __typename?: 'Query', messNotEatingToday?: Array<{ __typename?: 'MessNotEatingType', id: string, date: any, student: { __typename?: 'StudentType', studentName?: string | null } } | null> | null };
+
 export type AllPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1048,6 +1053,44 @@ export function useCreateMessNotEatingMutation(baseOptions?: Apollo.MutationHook
 export type CreateMessNotEatingMutationHookResult = ReturnType<typeof useCreateMessNotEatingMutation>;
 export type CreateMessNotEatingMutationResult = Apollo.MutationResult<CreateMessNotEatingMutation>;
 export type CreateMessNotEatingMutationOptions = Apollo.BaseMutationOptions<CreateMessNotEatingMutation, CreateMessNotEatingMutationVariables>;
+export const MessNotEatingTodayDocument = gql`
+    query messNotEatingToday {
+  messNotEatingToday {
+    id
+    student {
+      studentName
+    }
+    date
+  }
+}
+    `;
+
+/**
+ * __useMessNotEatingTodayQuery__
+ *
+ * To run a query within a React component, call `useMessNotEatingTodayQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMessNotEatingTodayQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMessNotEatingTodayQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMessNotEatingTodayQuery(baseOptions?: Apollo.QueryHookOptions<MessNotEatingTodayQuery, MessNotEatingTodayQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MessNotEatingTodayQuery, MessNotEatingTodayQueryVariables>(MessNotEatingTodayDocument, options);
+      }
+export function useMessNotEatingTodayLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MessNotEatingTodayQuery, MessNotEatingTodayQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MessNotEatingTodayQuery, MessNotEatingTodayQueryVariables>(MessNotEatingTodayDocument, options);
+        }
+export type MessNotEatingTodayQueryHookResult = ReturnType<typeof useMessNotEatingTodayQuery>;
+export type MessNotEatingTodayLazyQueryHookResult = ReturnType<typeof useMessNotEatingTodayLazyQuery>;
+export type MessNotEatingTodayQueryResult = Apollo.QueryResult<MessNotEatingTodayQuery, MessNotEatingTodayQueryVariables>;
 export const AllPostsDocument = gql`
     query allPosts {
   allPosts {

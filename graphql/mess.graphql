@@ -9,3 +9,13 @@ mutation createMessNotEating {
     }
   }
 }
+
+query messNotEatingToday {
+  messNotEatingToday {
+    id
+    student {
+      studentName
+    }
+    date
+  }
+}
