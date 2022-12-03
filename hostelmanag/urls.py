@@ -54,13 +54,12 @@ def callback(request):
 
 #
 
-def verify(request):
-    userId = request.GET.get('userId')
+from notification.view import send_telegram_notification
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("graphql_entry/", protected_graphql_view),
     path("callback/", callback, name="callback"),
     path('graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True)), name="graphql"),
-    path('verify/', verify, name="verify"),
+    path('notification/', send_telegram_notification, name="notification"),
 ]

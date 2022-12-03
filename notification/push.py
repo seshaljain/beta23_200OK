@@ -11,8 +11,8 @@ def send_telegram_message(message: str):
     return response
 
 
-res = send_telegram_message("Hello World from the program")
+# res = send_telegram_message("Hello World from the program")
 
-print(res.json())
+# print(res.json())
 
 # send_telegram_message("Hello world!!!", chat_id, api_key)
