@@ -2,6 +2,7 @@ import DashboardLayout from '../../../components/layouts/dashboard'
 import { Formik, Field, Form } from 'formik'
 import { useUserComplaintsQuery } from '../../../graphql/generated'
 import { useMutation, gql } from '@apollo/client'
+import { useState } from 'react'
 
 const GET_COMPLAINTS = gql`
   query userComplaints {
@@ -24,6 +25,62 @@ const CREATE_COMPLAINT = gql`
     }
   }
 `
+const ComplaintTable = ({ complaints }) => {
+  return (
+    <div class="max-w-full my-4">
+      <div class="flex flex-col">
+        <div class="overflow-x-auto shadow-md sm:rounded-lg">
+          <div class="inline-block min-w-full align-middle">
+            <div class="overflow-hidden ">
+              <table class="min-w-full divide-y divide-gray-200 table-fixed">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th
+                      scope="col"
+                      class="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
+                    >
+                      Complaint
+                    </th>
+                    <th
+                      scope="col"
+                      class="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
+                    >
+                      Date
+                    </th>
+                    <th
+                      scope="col"
+                      class="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
+                    >
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200 ">
+                  {complaints &&
+                    complaints.map((complaint) => {
+                      return (
+                        <tr key={complaint.id}>
+                          <td class="py-4 px-6 text-sm font-medium whitespace-nowrap">
+                            {complaint.complaint}
+                          </td>
+                          <td class="py-4 px-6 text-sm font-medium whitespace-nowrap">
+                            {complaint.date}
+                          </td>
+                          <td class="py-4 px-6 text-sm font-medium whitespace-nowrap">
+                            {complaint.status ? 'Resolved' : 'Pending'}
+                          </td>
+                        </tr>
+                      )
+                    })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 const committeeData = [
   {
@@ -101,63 +158,81 @@ const committeeData = [
 ]
 
 export default function Complaints() {
+  const [showModal, setShowModal] = useState(false)
   const [createComplaint] = useMutation(CREATE_COMPLAINT, {
     refetchQueries: [{ query: GET_COMPLAINTS }, 'Get user complaints'],
   })
   const { data } = useUserComplaintsQuery()
 
   return (
-    <DashboardLayout title="Complaints">
-      <h2 className="mt-8 text-2xl font-bold">Submit new complaint</h2>
-      <Formik
-        initialValues={{ title: '' }}
-        onSubmit={async (values) => {
-          createComplaint({
-            variables: {
-              complaint: values.title,
-            },
-          })
-        }}
-      >
-        <Form>
-          <label className="label" htmlFor="title">
-            Title
-          </label>
-          <Field className="field" id="title" name="title" type="text" />
-          <div className="mt-8">
-            <button
-              type="submit"
-              className="w-32 px-3 py-2 text-center bg-gray-200 rounded hover:shadow"
-            >
-              Submit
-            </button>
+    <DashboardLayout title="My Complaints">
+      {showModal ? (
+        <>
+          <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+            <div className="relative w-auto max-w-6xl mx-auto my-6">
+              <div className="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
+                <div className="flex items-start justify-between p-5 border-b border-solid rounded-t border-slate-200">
+                  <h3 className="text-3xl font-semibold">New Complaint</h3>
+                </div>
+                <div className="p-6">
+                  <Formik
+                    initialValues={{ title: '' }}
+                    onSubmit={async (values) => {
+                      createComplaint({
+                        variables: {
+                          complaint: values.title,
+                        },
+                      })
+                      setShowModal(false)
+                    }}
+                  >
+                    <Form>
+                      <label className="label" htmlFor="title">
+                        Title
+                      </label>
+                      <Field
+                        className="field"
+                        id="title"
+                        name="title"
+                        type="text"
+                      />
+                      <div className="mt-8">
+                        <button
+                          type="submit"
+                          className="w-32 px-3 py-2 text-center bg-gray-200 rounded hover:shadow"
+                        >
+                          Submit
+                        </button>
+                      </div>
+                    </Form>
+                  </Formik>
+                </div>
+                {/*footer*/}
+                <div className="flex items-center justify-end p-6 border-t border-solid rounded-b border-slate-200">
+                  <button
+                    className="px-6 py-2 mb-1 mr-1 text-sm font-bold text-red-500 uppercase transition-all duration-150 ease-linear outline-none background-transparent focus:outline-none"
+                    type="button"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-        </Form>
-      </Formik>
+          <div className="fixed inset-0 z-40 bg-black opacity-25"></div>
+        </>
+      ) : null}
 
-      <h2>Past complaints</h2>
-      <div className="bg-gray-200 rounded-t"></div>
-      <hr />
-      <table className="w-full">
-        <thead>
-          <tr className="py-4">
-            <th>Title</th>
-            <th>Submission Date</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data?.userComplaintsAll.map((c) => {
-            return (
-              <tr className="py-4" key={c.id}>
-                <td>{c.complaint}</td>
-                <td>{c.subDate}</td>
-                <td>{c.status}</td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
+      <ComplaintTable complaints={data?.userComplaintsAll} />
+
+      <button
+        className="px-6 py-3 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear bg-teal-500 rounded shadow outline-none active:bg-teal-600 hover:shadow-lg focus:outline-none"
+        type="button"
+        onClick={() => setShowModal(true)}
+      >
+        Submit new complaint
+      </button>
 
       <h2 className="mt-8 text-2xl font-bold">
         Emergency Committee Member Details

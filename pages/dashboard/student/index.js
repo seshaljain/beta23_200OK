@@ -3,12 +3,7 @@ import { useUserQuery } from '../../../graphql/generated'
 
 function Student() {
   const { data } = useUserQuery()
-  return (
-    <DashboardLayout>
-      <div>{data?.me?.id}</div>
-      <div>{data?.me?.username}</div>
-    </DashboardLayout>
-  )
+  return <DashboardLayout>User Stats</DashboardLayout>
 }
 
 Student.auth = true
