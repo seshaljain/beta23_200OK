@@ -226,6 +226,7 @@ export type PostType = {
   content: Scalars['String'];
   createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
+  student: StudentType;
   tags: Scalars['String'];
   title: Scalars['String'];
 };
@@ -334,6 +335,7 @@ export type StudentType = {
   fatherName?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   noDues: Scalars['Boolean'];
+  postSet: Array<PostType>;
   rideSet: Array<RideType>;
   room?: Maybe<Scalars['String']>;
   roomAllotted: Scalars['Boolean'];
@@ -383,7 +385,6 @@ export type UserNode = Node & {
   lastLogin?: Maybe<Scalars['DateTime']>;
   lastName: Scalars['String'];
   pk?: Maybe<Scalars['Int']>;
-  postSet: Array<PostType>;
   secondaryEmail?: Maybe<Scalars['String']>;
   student?: Maybe<StudentType>;
   /** Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only. */
@@ -470,6 +471,11 @@ export type IntimeMutationVariables = Exact<{
 
 
 export type IntimeMutation = { __typename?: 'Mutation', inTime?: { __typename?: 'StudentGoingInTime', studentGoingInTime?: { __typename?: 'StudentInOutTimeType', id: string, inTime?: any | null, outTime?: any | null } | null } | null };
+
+export type AllPostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllPostsQuery = { __typename?: 'Query', allPosts?: Array<{ __typename?: 'PostType', id: string, title: string, tags: string, content: string } | null> | null };
 
 export type UpdateStudMutationVariables = Exact<{
   course?: InputMaybe<Scalars['String']>;
@@ -833,6 +839,43 @@ export function useIntimeMutation(baseOptions?: Apollo.MutationHookOptions<Intim
 export type IntimeMutationHookResult = ReturnType<typeof useIntimeMutation>;
 export type IntimeMutationResult = Apollo.MutationResult<IntimeMutation>;
 export type IntimeMutationOptions = Apollo.BaseMutationOptions<IntimeMutation, IntimeMutationVariables>;
+export const AllPostsDocument = gql`
+    query allPosts {
+  allPosts {
+    id
+    title
+    tags
+    content
+  }
+}
+    `;
+
+/**
+ * __useAllPostsQuery__
+ *
+ * To run a query within a React component, call `useAllPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllPostsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllPostsQuery(baseOptions?: Apollo.QueryHookOptions<AllPostsQuery, AllPostsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllPostsQuery, AllPostsQueryVariables>(AllPostsDocument, options);
+      }
+export function useAllPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllPostsQuery, AllPostsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllPostsQuery, AllPostsQueryVariables>(AllPostsDocument, options);
+        }
+export type AllPostsQueryHookResult = ReturnType<typeof useAllPostsQuery>;
+export type AllPostsLazyQueryHookResult = ReturnType<typeof useAllPostsLazyQuery>;
+export type AllPostsQueryResult = Apollo.QueryResult<AllPostsQuery, AllPostsQueryVariables>;
 export const UpdateStudDocument = gql`
     mutation updateStud($course: String, $enrollmentNo: String, $fatherName: String, $studentName: String) {
   updateStudent(
