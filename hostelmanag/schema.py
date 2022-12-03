@@ -13,6 +13,8 @@ from ridesharing.schema import RideQuery
 from posting.schema import PostMutation
 from posting.schema import PostQuery
 
+from mess.schema import MessNotEatingMutation, MessNotEatingQuery
+
 class AuthMutation(graphene.ObjectType):
     register = mutations.Register.Field()
     verify_account = mutations.VerifyAccount.Field()
@@ -20,11 +22,11 @@ class AuthMutation(graphene.ObjectType):
     update_account = mutations.UpdateAccount.Field()
 
 
-class Query(MeQuery, ComplaintQuery, StudentInOutTimeQuery, RideQuery, PostQuery, WardenQuery, graphene.ObjectType):
+class Query(MeQuery, ComplaintQuery, StudentInOutTimeQuery, RideQuery, PostQuery, WardenQuery, MessNotEatingQuery, graphene.ObjectType):
     pass
 
 
-class Mutation(AuthMutation, StudentMutation, ComplaintMutation, StudentInOutTimeMutation, RideMutation, PostMutation, graphene.ObjectType):
+class Mutation(AuthMutation, StudentMutation, ComplaintMutation, StudentInOutTimeMutation, RideMutation, PostMutation, MessNotEatingMutation, graphene.ObjectType):
     pass
 
 
