@@ -3,11 +3,13 @@ from graphene_django import DjangoObjectType
 from graphql_jwt.decorators import login_required
 
 from .models import Ride
+from user.models import Student
 
 
 class RideType(DjangoObjectType):
     class Meta:
         model = Ride
+        # fields = ('id', 'user', 'has_vehicle', 'vehicle_type', 'finished', 'start_time')
 
 
 class CreateRide(graphene.Mutation):
@@ -17,12 +19,14 @@ class CreateRide(graphene.Mutation):
         has_vehicle = graphene.Boolean()
         vehicle_type = graphene.String()
         start_time = graphene.DateTime()
+        end_time = graphene.DateTime()
 
     @classmethod
     @login_required
-    def mutate(cls, root, info, has_vehicle, vehicle_type, start_time):
-        ride = Ride(user=info.context.user, has_vehicle=has_vehicle,
-                    vehicle_type=vehicle_type, start_time=start_time)
+    def mutate(cls, root, info, has_vehicle, vehicle_type, start_time, end_time):
+        student = Student.objects.get(user=info.context.user)
+        ride = Ride(student=student, has_vehicle=has_vehicle,
+                    vehicle_type=vehicle_type, start_time=start_time, end_time=end_time)
         ride.save()
 
         return CreateRide(ride=ride)
