@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from user.models import AbstractHostelUser, Room, Student, Complaint, Course, StudentInOutTime
+from user.models import AbstractHostelUser, Student, Complaint, Course, StudentInOutTime
 
 # Register your models here.
 
@@ -14,10 +14,6 @@ class StudentAdmin(admin.ModelAdmin):
 
 admin.site.register(Student, StudentAdmin)
 
-class RoomAdmin(admin.ModelAdmin):
-    pass
-
-admin.site.register(Room, RoomAdmin)
 
 class ComplaintAdmin(admin.ModelAdmin):
     pass

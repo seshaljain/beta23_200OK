@@ -2,7 +2,7 @@ import graphene
 from graphene_django import DjangoObjectType
 from graphql_jwt.decorators import login_required
 
-from .models import Student, Complaint, StudentInOutTime
+from .models import Student, Warden, Complaint, StudentInOutTime
 
 from datetime import datetime
 
@@ -18,8 +18,6 @@ class UpdateStudent(graphene.Mutation):
         father_name = graphene.String()
         enrollment_no = graphene.String()
         course = graphene.String()
-        dob = graphene.String()
-        gender = graphene.String()
 
     @classmethod
     @login_required
@@ -58,6 +56,33 @@ class StudentMutation(graphene.ObjectType):
     update_student = UpdateStudent.Field()
 
 
+class WardenType(DjangoObjectType):
+    class Meta:
+        model = Warden
+
+
+# class UpdateWarden(DjangoObjectType):
+#     pass
+
+class WardenQuery(graphene.ObjectType):
+    get_all_students = graphene.List(StudentType)
+    get_student = graphene.Field(StudentType, id=graphene.Int())
+
+    @classmethod
+    def resolve_get_student(cls, info, id):
+        return Student.objects.get(id=id)
+    
+    def resolve_get_all_students(self, info):
+        return Student.objects.all()
+
+    all_wardens = graphene.List(WardenType)
+    warden = graphene.Field(WardenType, id=graphene.Int())
+
+    def resolve_all_wardens(self, info):
+        return Warden.objects.all()
+
+    def resolve_warden(self, info, id):
+        return Warden.objects.get(id=id)
 
 class ComplaintType(DjangoObjectType):
     class Meta:
@@ -115,6 +140,7 @@ class ComplaintQuery(graphene.ObjectType):
 
     @classmethod
     @login_required
+    
     def resolve_complaints_all(cls, root, info):
         if not info.context.user.is_student:
             return Complaint.objects.all()
