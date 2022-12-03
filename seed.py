@@ -1,6 +1,9 @@
 from user.models import Student
 from posting.models import Post
+from user.models import StudentInOutTime
 from django.contrib.auth import get_user_model
+import datetime
+import random
 
 import lorem
 
@@ -37,4 +40,33 @@ def create_post(n, cnt=10):
             tags=f'{["one", "two", "three", "four", "five"][i%5]}'
         )
 
-create_post(10)
+# create_post(10)
+
+
+def create_student_inout_time(n, cnt=10):
+    for i in range(n, n+cnt):
+        studentId = 110+random.randint(0, 10)
+        user = User.objects.get(username=f'user{studentId}')
+        if not user:
+            continue
+
+        student = Student.objects.filter(user=user).first()
+
+        if not student:
+            continue
+
+        in_time = datetime.datetime.now()
+        in_time_delta = random.randint(300, 600);
+        in_time = in_time + datetime.timedelta(seconds=in_time_delta)
+        
+        out_time_delta = random.randint(0, 100)
+        out_time = in_time + datetime.timedelta(minutes=out_time_delta)
+
+        StudentInOutTime.objects.create(
+            student=student,
+            in_time=in_time,
+            out_time=out_time,
+            # date=datetime.date()
+        )
+
+create_student_inout_time(10, 25)
