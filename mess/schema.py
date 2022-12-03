@@ -7,9 +7,11 @@ from user.models import Student
 
 import datetime
 
+
 class MessNotEatingType(DjangoObjectType):
     class Meta:
         model = MessNotEating
+
 
 class CreateMessNotEating(graphene.Mutation):
     mess_not_eating = graphene.Field(MessNotEatingType)
@@ -21,18 +23,28 @@ class CreateMessNotEating(graphene.Mutation):
     @login_required
     def mutate(cls, root, info):
         student = Student.objects.get(user=info.context.user)
-        mess_not_eating = MessNotEating(student=student, date=datetime.datetime.date(datetime.datetime.now()))
-        mess_not_eating.save()
+        # check if there is already an entry for today
+        mess_not_eating_today = MessNotEating.objects.filter(
+            student=student, date=datetime.date.today())
 
-        return CreateMessNotEating(mess_not_eating=mess_not_eating)
+        if mess_not_eating_today is None:
+            mess_not_eating = MessNotEating(
+                student=student, date=datetime.datetime.date(datetime.datetime.now()))
+            mess_not_eating.save()
+            return CreateMessNotEating(mess_not_eating=mess_not_eating)
+
+        return CreateMessNotEating(mess_not_eating=mess_not_eating_today[0])
+
 
 class MessNotEatingMutation(graphene.ObjectType):
     create_mess_not_eating = CreateMessNotEating.Field()
 
 
 class MessNotEatingQuery(graphene.ObjectType):
-    mess_not_eating_today = graphene.List(MessNotEatingType, date=graphene.Date())
-    student_not_eaten = graphene.List(MessNotEatingType, username=graphene.String())
+    mess_not_eating_today = graphene.List(
+        MessNotEatingType, date=graphene.Date())
+    student_not_eaten = graphene.List(
+        MessNotEatingType, username=graphene.String())
 
     @classmethod
     @login_required
@@ -41,7 +53,6 @@ class MessNotEatingQuery(graphene.ObjectType):
         if date is not None:
             return MessNotEating.objects.filter(date=date)
         return MessNotEating.objects.filter(date=datetime.datetime.date(datetime.datetime.now()))
-    
 
     @classmethod
     @login_required
