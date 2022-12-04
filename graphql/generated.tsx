@@ -520,6 +520,14 @@ export type CreateComplaintMutationVariables = Exact<{
 
 export type CreateComplaintMutation = { __typename?: 'Mutation', createComplaint?: { __typename?: 'CreateComplaint', complaint?: { __typename?: 'ComplaintType', id: string, status: boolean, complaint: string } | null } | null };
 
+export type UpdateComplaintMutationVariables = Exact<{
+  id: Scalars['Int'];
+  status: Scalars['String'];
+}>;
+
+
+export type UpdateComplaintMutation = { __typename?: 'Mutation', updateComplaint?: { __typename?: 'UpdateComplaint', complaint?: { __typename?: 'ComplaintType', id: string } | null } | null };
+
 export type OuttimeMutationVariables = Exact<{
   username: Scalars['String'];
 }>;
@@ -865,6 +873,42 @@ export function useCreateComplaintMutation(baseOptions?: Apollo.MutationHookOpti
 export type CreateComplaintMutationHookResult = ReturnType<typeof useCreateComplaintMutation>;
 export type CreateComplaintMutationResult = Apollo.MutationResult<CreateComplaintMutation>;
 export type CreateComplaintMutationOptions = Apollo.BaseMutationOptions<CreateComplaintMutation, CreateComplaintMutationVariables>;
+export const UpdateComplaintDocument = gql`
+    mutation updateComplaint($id: Int!, $status: String!) {
+  updateComplaint(id: $id, status: $status) {
+    complaint {
+      id
+    }
+  }
+}
+    `;
+export type UpdateComplaintMutationFn = Apollo.MutationFunction<UpdateComplaintMutation, UpdateComplaintMutationVariables>;
+
+/**
+ * __useUpdateComplaintMutation__
+ *
+ * To run a mutation, you first call `useUpdateComplaintMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateComplaintMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateComplaintMutation, { data, loading, error }] = useUpdateComplaintMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      status: // value for 'status'
+ *   },
+ * });
+ */
+export function useUpdateComplaintMutation(baseOptions?: Apollo.MutationHookOptions<UpdateComplaintMutation, UpdateComplaintMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateComplaintMutation, UpdateComplaintMutationVariables>(UpdateComplaintDocument, options);
+      }
+export type UpdateComplaintMutationHookResult = ReturnType<typeof useUpdateComplaintMutation>;
+export type UpdateComplaintMutationResult = Apollo.MutationResult<UpdateComplaintMutation>;
+export type UpdateComplaintMutationOptions = Apollo.BaseMutationOptions<UpdateComplaintMutation, UpdateComplaintMutationVariables>;
 export const OuttimeDocument = gql`
     mutation outtime($username: String!) {
   outTime(username: $username) {

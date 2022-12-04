@@ -29,3 +29,11 @@ mutation createComplaint($complaint: String!) {
     }
   }
 }
+
+mutation updateComplaint($id: Int!, $status: String!) {
+  updateComplaint(id: $id, status: $status) {
+    complaint {
+      id
+    }
+  }
+}

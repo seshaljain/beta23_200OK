@@ -5,10 +5,12 @@ import { useAllPostsQuery } from '../../../graphql/generated'
 import dayjs from 'dayjs'
 
 const CREATE_POST = gql`
-  mutation createPost($title: String, $tags: String, $content: String) {
-    createPost(title: $title, tags: $tags, content: $content) {
-      post {
+  mutation createComplaint($complaint: String!) {
+    createComplaint(complaint: $complaint) {
+      complaint {
         id
+        status
+        complaint
       }
     }
   }

@@ -37,19 +37,19 @@ const ComplaintTable = ({ complaints }) => {
                   <tr>
                     <th
                       scope="col"
-                      className="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
+                      className="px-6 py-3 text-xs font-medium tracking-wider text-left uppercase "
                     >
                       Complaint
                     </th>
                     <th
                       scope="col"
-                      className="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
+                      className="px-6 py-3 text-xs font-medium tracking-wider text-left uppercase "
                     >
                       Date
                     </th>
                     <th
                       scope="col"
-                      className="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase "
+                      className="px-6 py-3 text-xs font-medium tracking-wider text-left uppercase "
                     >
                       Status
                     </th>
@@ -60,13 +60,13 @@ const ComplaintTable = ({ complaints }) => {
                     complaints.map((complaint) => {
                       return (
                         <tr key={complaint.id}>
-                          <td className="py-4 px-6 text-sm font-medium whitespace-nowrap">
+                          <td className="px-6 py-4 text-sm font-medium whitespace-nowrap">
                             {complaint.complaint}
                           </td>
-                          <td className="py-4 px-6 text-sm font-medium whitespace-nowrap">
+                          <td className="px-6 py-4 text-sm font-medium whitespace-nowrap">
                             {complaint.date}
                           </td>
-                          <td className="py-4 px-6 text-sm font-medium whitespace-nowrap">
+                          <td className="px-6 py-4 text-sm font-medium whitespace-nowrap">
                             {complaint.status ? 'Resolved' : 'Pending'}
                           </td>
                         </tr>
