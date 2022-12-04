@@ -30,6 +30,12 @@ const OutTimeTable = ({ inOutTimes }) => {
                     >
                       OutTime
                     </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-xs font-medium tracking-wider text-left uppercase "
+                    >
+                      Duration
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 ">
@@ -45,6 +51,9 @@ const OutTimeTable = ({ inOutTimes }) => {
                           </td>
                           <td className="px-6 py-4 text-sm font-medium whitespace-nowrap">
                             {moment(t.outTime).format('HH:mm A')}
+                          </td>
+                          <td className="px-6 py-4 text-sm font-medium whitespace-nowrap">
+                            {moment(t.outTime).fromNow(true)}
                           </td>
                         </tr>
                       )
