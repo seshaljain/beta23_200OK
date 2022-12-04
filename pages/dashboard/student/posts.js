@@ -5,12 +5,10 @@ import { useAllPostsQuery } from '../../../graphql/generated'
 import dayjs from 'dayjs'
 
 const CREATE_POST = gql`
-  mutation createComplaint($complaint: String!) {
-    createComplaint(complaint: $complaint) {
-      complaint {
+  mutation createPost($title: String, $tags: String, $content: String) {
+    createPost(title: $title, tags: $tags, content: $content) {
+      post {
         id
-        status
-        complaint
       }
     }
   }
@@ -33,7 +31,7 @@ const GET_POSTS = gql`
 `
 
 export default function Posts() {
-  const [updateStud] = useMutation(CREATE_POST, {
+  const [createPost] = useMutation(CREATE_POST, {
     refetchQueries: [{ query: GET_POSTS }, 'GetPosts'],
   })
   const { data } = useAllPostsQuery()
@@ -50,7 +48,7 @@ export default function Posts() {
               content: '',
             }}
             onSubmit={async (values) => {
-              updateStud({
+              createPost({
                 variables: {
                   title: values.title,
                   tags: values.tags,
