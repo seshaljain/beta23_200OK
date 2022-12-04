@@ -3,7 +3,7 @@ import moment from 'moment'
 import { QRCodeCanvas } from 'qrcode.react'
 
 const getTimestamp = () => {
-  return `http://10.64.158.113:3000/gatepass?ts=${moment().unix()}`
+  return `/gatepass?ts=${moment().unix()}`
 }
 
 export default function QRScanner() {
